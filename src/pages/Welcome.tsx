@@ -103,7 +103,7 @@ const Welcome = () => {
     exit: { opacity: 0, scale: 0.96, y: -20 },
   };
 
-  const pageTransition = { duration: 0.45, ease: [0.4, 0, 0.2, 1] };
+  const pageTransition = { duration: 0.45, ease: [0.4, 0, 0.2, 1] as const };
 
   const Logo = () => (
     <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity z-20">
