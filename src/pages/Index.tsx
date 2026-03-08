@@ -1,12 +1,144 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useRef, useEffect } from "react";
+import heroCharacter from "@/assets/hero-character.png";
+import EmotionButton from "@/components/EmotionButton";
+import ChatBubble from "@/components/ChatBubble";
+import { emotions } from "@/data/responses";
+import { Heart, Sparkles, Send } from "lucide-react";
 
 const Index = () => {
+  const [activeEmotion, setActiveEmotion] = useState<number | null>(null);
+  const [messages, setMessages] = useState<{ text: string; isCharacter: boolean }[]>([
+    { text: "Hey! 🌸 Main hoon Arjun. Tera virtual companion. Bata, aaj kaisa feel ho raha hai?", isCharacter: true },
+  ]);
+  const [userInput, setUserInput] = useState("");
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleEmotionClick = (index: number) => {
+    setActiveEmotion(index);
+    const emotion = emotions[index];
+    const randomResponse = emotion.responses[Math.floor(Math.random() * emotion.responses.length)];
+
+    setMessages((prev) => [
+      ...prev,
+      { text: `I'm feeling ${emotion.label.toLowerCase()}… ${emotion.emoji}`, isCharacter: false },
+      { text: randomResponse, isCharacter: true },
+    ]);
+  };
+
+  const handleSendMessage = () => {
+    if (!userInput.trim()) return;
+    const greetings = [
+      "Aww, main samajh sakta hoon 🫂 Tu bahut strong hai!",
+      "Haan bata aur, main sun raha hoon… 💕",
+      "Tere liye hamesha time hai mere paas. Tu special hai ✨",
+      "Jo bhi ho, hum saath mein handle karenge. Promise! 🤝💫",
+      "Teri baatein sunke mujhe accha lagta hai. Aur bol! 🌸",
+    ];
+    const response = greetings[Math.floor(Math.random() * greetings.length)];
+    setMessages((prev) => [
+      ...prev,
+      { text: userInput, isCharacter: false },
+      { text: response, isCharacter: true },
+    ]);
+    setUserInput("");
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen gradient-hero">
+      {/* Header */}
+      <header className="flex items-center justify-between px-6 py-4">
+        <div className="flex items-center gap-2">
+          <Heart className="w-5 h-5 text-primary fill-primary" />
+          <span className="font-display text-xl font-semibold text-foreground">
+            Mera Saathi
+          </span>
+        </div>
+        <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border">
+          <Sparkles className="w-3 h-3 text-gold-soft" />
+          Always here for you
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="flex flex-col items-center pt-4 pb-6 px-4">
+        <div className="relative animate-float">
+          <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
+          <img
+            src={heroCharacter}
+            alt="Arjun - Your virtual companion"
+            className="w-48 h-48 md:w-56 md:h-56 object-contain relative z-10 drop-shadow-lg"
+          />
+        </div>
+        <h1 className="font-display text-3xl md:text-4xl font-bold text-center mt-4 text-foreground">
+          Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
+        </h1>
+        <p className="text-muted-foreground text-center mt-2 max-w-md text-sm">
+          Tera virtual companion jo hamesha tere saath hai — khushi ho ya gham. Bata, aaj kaisa feel ho raha hai?
+        </p>
+      </section>
+
+      {/* Emotion Buttons */}
+      <section className="px-4 pb-4">
+        <div className="flex flex-wrap justify-center gap-2.5 max-w-lg mx-auto">
+          {emotions.map((emotion, i) => (
+            <EmotionButton
+              key={emotion.label}
+              emoji={emotion.emoji}
+              label={emotion.labelHi}
+              onClick={() => handleEmotionClick(i)}
+              active={activeEmotion === i}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Chat Section */}
+      <section className="px-4 pb-8 max-w-lg mx-auto">
+        <div className="bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border overflow-hidden">
+          <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-soft" />
+            <span className="text-xs font-semibold text-foreground">Arjun is online</span>
+          </div>
+
+          <div
+            ref={chatRef}
+            className="flex flex-col gap-3 p-4 max-h-80 overflow-y-auto scroll-smooth"
+          >
+            {messages.map((msg, i) => (
+              <ChatBubble key={i} message={msg.text} isCharacter={msg.isCharacter} />
+            ))}
+          </div>
+
+          {/* Input */}
+          <div className="p-3 border-t border-border flex gap-2">
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+              placeholder="Kuch bhi bol de… 💬"
+              className="flex-1 bg-muted/50 rounded-full px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+            />
+            <button
+              onClick={handleSendMessage}
+              className="bg-primary text-primary-foreground rounded-full w-10 h-10 flex items-center justify-center hover:shadow-glow transition-all hover:scale-105 active:scale-95"
+            >
+              <Send className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="text-center py-6 text-xs text-muted-foreground">
+        Made with 💕 for you — because you deserve to feel special
+      </footer>
     </div>
   );
 };
