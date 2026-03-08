@@ -28,20 +28,20 @@ const emotionImages = [
 ];
 
 const emotionCaptions = [
-  "Ye flowers tere liye… please smile kar de 🌹",
-  "Yaaay! Chal celebrate karte hain! 🎉",
+  "Ye flowers aapke liye… please smile kar dijiye 🌹",
+  "Yaaay! Chaliye celebrate karte hain! 🎉",
   "Shhh… sab theek hai, main hoon na 🫂",
-  "Chal chai peete hain saath mein ☕",
-  "Bore mat ho, dekh masti! ✌️",
-  "Ye dil sirf tere liye hai 💝",
-  "Main story sunata hoon, so ja 📖",
-  "Le bahut bada waala hug! 🤗",
+  "Chaliye chai peete hain saath mein ☕",
+  "Bore mat hoiye, dekhiye masti! ✌️",
+  "Ye dil sirf aapke liye hai 💝",
+  "Main story sunata hoon, so jaiye 📖",
+  "Lijiye bahut bada waala hug! 🤗",
 ];
 
 const Index = () => {
   const [activeEmotion, setActiveEmotion] = useState<number | null>(null);
   const [messages, setMessages] = useState<{ text: string; isCharacter: boolean }[]>([
-    { text: "Hey! 🌸 Main hoon Arjun. Tera virtual companion. Bata, aaj kaisa feel ho raha hai?", isCharacter: true },
+    { text: "Hey! 🌸 Main hoon Arjun. Aapka virtual companion. Bataiye, aaj kaisa feel ho raha hai?", isCharacter: true },
   ]);
   const [userInput, setUserInput] = useState("");
   const [currentImage, setCurrentImage] = useState(heroCharacter);
@@ -88,11 +88,11 @@ const Index = () => {
   const handleSendMessage = () => {
     if (!userInput.trim()) return;
     const greetings = [
-      "Aww, main samajh sakta hoon 🫂 Tu bahut strong hai!",
-      "Haan bata aur, main sun raha hoon… 💕",
-      "Tere liye hamesha time hai mere paas. Tu special hai ✨",
+      "Aww, main samajh sakta hoon 🫂 Aap bahut strong hain!",
+      "Haan bataiye aur, main sun raha hoon… 💕",
+      "Aapke liye hamesha time hai mere paas. Aap special hain ✨",
       "Jo bhi ho, hum saath mein handle karenge. Promise! 🤝💫",
-      "Teri baatein sunke mujhe accha lagta hai. Aur bol! 🌸",
+      "Aapki baatein sunke mujhe accha lagta hai. Aur bataiye! 🌸",
     ];
     const response = greetings[Math.floor(Math.random() * greetings.length)];
     setMessages((prev) => [
@@ -175,7 +175,7 @@ const Index = () => {
                   Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
                 </h1>
                 <p className="text-muted-foreground text-center mt-2 max-w-xs text-sm">
-                  Tera virtual companion jo hamesha tere saath hai 💕
+                  Aapka virtual companion jo hamesha aapke saath hai 💕
                 </p>
               </>
             )}
