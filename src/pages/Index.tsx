@@ -1,9 +1,39 @@
 import { useState, useRef, useEffect } from "react";
 import heroCharacter from "@/assets/hero-character.png";
+import arjunSad from "@/assets/arjun-sad.png";
+import arjunHappy from "@/assets/arjun-happy.png";
+import arjunAnxious from "@/assets/arjun-anxious.png";
+import arjunAngry from "@/assets/arjun-angry.png";
+import arjunBored from "@/assets/arjun-bored.png";
+import arjunHeartbroken from "@/assets/arjun-heartbroken.png";
+import arjunSleep from "@/assets/arjun-sleep.png";
+import arjunHug from "@/assets/arjun-hug.png";
 import EmotionButton from "@/components/EmotionButton";
 import ChatBubble from "@/components/ChatBubble";
 import { emotions } from "@/data/responses";
 import { Heart, Sparkles, Send } from "lucide-react";
+
+const emotionImages = [
+  arjunSad,
+  arjunHappy,
+  arjunAnxious,
+  arjunAngry,
+  arjunBored,
+  arjunHeartbroken,
+  arjunSleep,
+  arjunHug,
+];
+
+const emotionCaptions = [
+  "Ye flowers tere liye… please smile kar de 🌹",
+  "Yaaay! Chal celebrate karte hain! 🎉",
+  "Shhh… sab theek hai, main hoon na 🫂",
+  "Chal chai peete hain saath mein ☕",
+  "Bore mat ho, dekh masti! ✌️",
+  "Ye dil sirf tere liye hai 💝",
+  "Main story sunata hoon, so ja 📖",
+  "Le bahut bada waala hug! 🤗",
+];
 
 const Index = () => {
   const [activeEmotion, setActiveEmotion] = useState<number | null>(null);
@@ -11,6 +41,8 @@ const Index = () => {
     { text: "Hey! 🌸 Main hoon Arjun. Tera virtual companion. Bata, aaj kaisa feel ho raha hai?", isCharacter: true },
   ]);
   const [userInput, setUserInput] = useState("");
+  const [currentImage, setCurrentImage] = useState(heroCharacter);
+  const [imageCaption, setImageCaption] = useState("");
   const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,6 +53,9 @@ const Index = () => {
 
   const handleEmotionClick = (index: number) => {
     setActiveEmotion(index);
+    setCurrentImage(emotionImages[index]);
+    setImageCaption(emotionCaptions[index]);
+    
     const emotion = emotions[index];
     const randomResponse = emotion.responses[Math.floor(Math.random() * emotion.responses.length)];
 
@@ -67,20 +102,29 @@ const Index = () => {
 
       {/* Hero Section */}
       <section className="flex flex-col items-center pt-4 pb-6 px-4">
-        <div className="relative animate-float">
+        <div className="relative">
           <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
           <img
-            src={heroCharacter}
+            key={currentImage}
+            src={currentImage}
             alt="Arjun - Your virtual companion"
-            className="w-48 h-48 md:w-56 md:h-56 object-contain relative z-10 drop-shadow-lg"
+            className="w-48 h-48 md:w-56 md:h-56 object-contain relative z-10 drop-shadow-lg animate-fade-in-up transition-all duration-500"
           />
         </div>
-        <h1 className="font-display text-3xl md:text-4xl font-bold text-center mt-4 text-foreground">
-          Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
-        </h1>
-        <p className="text-muted-foreground text-center mt-2 max-w-md text-sm">
-          Tera virtual companion jo hamesha tere saath hai — khushi ho ya gham. Bata, aaj kaisa feel ho raha hai?
-        </p>
+        {imageCaption ? (
+          <p className="mt-3 text-sm font-semibold text-primary animate-fade-in-up text-center">
+            {imageCaption}
+          </p>
+        ) : (
+          <>
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-center mt-4 text-foreground">
+              Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
+            </h1>
+            <p className="text-muted-foreground text-center mt-2 max-w-md text-sm">
+              Tera virtual companion jo hamesha tere saath hai — khushi ho ya gham. Bata, aaj kaisa feel ho raha hai?
+            </p>
+          </>
+        )}
       </section>
 
       {/* Emotion Buttons */}
