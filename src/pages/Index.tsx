@@ -175,7 +175,7 @@ const Index = () => {
                   Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
                 </h1>
                 <p className="text-muted-foreground text-center mt-2 max-w-xs text-sm">
-                  Tera virtual companion jo hamesha tere saath hai 💕
+                  Aapka virtual companion jo hamesha aapke saath hai 💕
                 </p>
               </>
             )}
