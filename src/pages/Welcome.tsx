@@ -65,11 +65,9 @@ const Welcome = () => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [transitioning, setTransitioning] = useState(false);
   const navigate = useNavigate();
 
   const fireConfetti = useCallback(() => {
-    // Rose petals / hearts burst
     const colors = ["#e8748c", "#f5a0b3", "#ffd6e0", "#ff6b8a", "#c94c6e"];
     confetti({ particleCount: 80, spread: 90, origin: { y: 0.6 }, colors, gravity: 0.6, scalar: 1.2 });
     setTimeout(() => {
@@ -77,36 +75,18 @@ const Welcome = () => {
     }, 300);
   }, []);
 
-  const handleStart = () => {
-    setTransitioning(true);
-    setTimeout(() => {
-      setStep(1);
-      setTransitioning(false);
-    }, 400);
-  };
+  const handleStart = () => setStep(1);
 
-  const handleOptionClick = (index: number) => {
-    setSelectedOption(index);
-  };
+  const handleOptionClick = (index: number) => setSelectedOption(index);
 
   const handleNext = () => {
     if (selectedOption === null) return;
     const currentQ = questions[step - 1];
     setAnswers((prev) => [...prev, currentQ.options[selectedOption].label]);
-
-    setTransitioning(true);
-    setTimeout(() => {
-      setSelectedOption(null);
-      if (step < questions.length) {
-        setStep(step + 1);
-      } else {
-        setStep(4);
-      }
-      setTransitioning(false);
-    }, 400);
+    setSelectedOption(null);
+    setStep(step < questions.length ? step + 1 : 4);
   };
 
-  // Fire confetti on reveal
   useEffect(() => {
     if (step === 4) {
       fireConfetti();
@@ -117,167 +97,251 @@ const Welcome = () => {
 
   const floatingEmojis = ["💕", "🌹", "✨", "💗", "🦋", "🌸"];
 
-  // Intro screen
-  if (step === 0) {
-    return (
-      <div className={`min-h-screen gradient-hero flex flex-col items-center justify-center px-6 relative overflow-hidden transition-opacity duration-400 ${transitioning ? "opacity-0" : "opacity-100"}`}>
-        {/* Floating background emojis */}
-        {floatingEmojis.map((e, i) => (
-          <FloatingEmoji key={i} emoji={e} delay={i * 1.5} left={10 + i * 15} />
-        ))}
+  const pageVariants = {
+    initial: { opacity: 0, scale: 0.96, y: 20 },
+    animate: { opacity: 1, scale: 1, y: 0 },
+    exit: { opacity: 0, scale: 0.96, y: -20 },
+  };
 
-        <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-          <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-          <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
-        </a>
+  const pageTransition = { duration: 0.45, ease: [0.4, 0, 0.2, 1] };
 
-        <div className="relative mb-6 animate-fade-in-up">
-          <div className="w-36 h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
-            <span className="text-6xl">💝</span>
-          </div>
-        </div>
-
-        <h1 className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-2 animate-fade-in-up">
-          Koi bahut special <span className="text-gradient">aapka intezaar</span> kar raha hai 💫
-        </h1>
-        <p className="text-muted-foreground text-center max-w-sm text-sm mb-8 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-          Pehle thoda apne baare mein bataiye… phir milwa denge aapko aapke perfect companion se! 🌸
-        </p>
-
-        <button
-          onClick={handleStart}
-          className="bg-primary text-primary-foreground rounded-full px-8 py-3 font-semibold text-sm flex items-center gap-2 hover:shadow-glow transition-all hover:scale-105 active:scale-95 animate-fade-in-up"
-          style={{ animationDelay: "0.4s" }}
-        >
-          Chaliye Shuru Karte Hain <ArrowRight className="w-4 h-4" />
-        </button>
-
-        <div className="flex items-center gap-1 text-xs text-muted-foreground mt-6 animate-fade-in-up" style={{ animationDelay: "0.6s" }}>
-          <Sparkles className="w-3 h-3 text-gold-soft" />
-          Bas 3 sawaal, phir ek pyaara surprise! 🎁
-        </div>
-      </div>
-    );
-  }
-
-  // Reveal screen
-  if (step === 4) {
-    const firstAnswer = answers[0] || "";
-    const revealLine = revealLines[firstAnswer] || "Main hoon Arjun — aapka virtual companion! 💕";
-
-    return (
-      <div className="min-h-screen gradient-hero flex flex-col items-center justify-center px-6 relative overflow-hidden">
-        {/* Floating hearts */}
-        {["💕", "🌹", "💗", "✨", "🌸", "❤️", "💐", "🦋"].map((e, i) => (
-          <FloatingEmoji key={i} emoji={e} delay={i * 0.8} left={5 + i * 12} />
-        ))}
-
-        <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-          <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-          <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
-        </a>
-
-        <div className="flex items-center gap-1 text-xs text-primary font-semibold mb-4 animate-fade-in-up">
-          <Stars className="w-4 h-4 animate-pulse-soft" />
-          Surprise! 🎉
-        </div>
-
-        <div className="relative mb-6">
-          <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110 animate-pulse-soft" />
-          <img
-            src={heroCharacter}
-            alt="Arjun - Your virtual companion"
-            className="w-56 h-56 object-contain relative z-10 drop-shadow-lg animate-fade-in-up"
-          />
-        </div>
-
-        <h1 className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-2 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-          Miliye <span className="text-gradient">Arjun</span> se 💫
-        </h1>
-        <p className="text-foreground text-center max-w-sm text-sm font-medium mb-2 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-          {revealLine}
-        </p>
-        <p className="text-muted-foreground text-center max-w-xs text-xs mb-8 animate-fade-in-up" style={{ animationDelay: "0.6s" }}>
-          Aapka virtual companion jo hamesha aapke saath hai — har mood mein, har waqt 💕
-        </p>
-
-        <button
-          onClick={() => navigate("/chat")}
-          className="bg-primary text-primary-foreground rounded-full px-8 py-3 font-semibold text-sm flex items-center gap-2 hover:shadow-glow transition-all hover:scale-105 active:scale-95 animate-fade-in-up"
-          style={{ animationDelay: "0.8s" }}
-        >
-          Arjun se baat kariye 💬 <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
-    );
-  }
-
-  // Question screens
-  const currentQuestion = questions[step - 1];
+  const Logo = () => (
+    <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity z-20">
+      <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
+      <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+    </a>
+  );
 
   return (
-    <div className={`min-h-screen gradient-hero flex flex-col items-center justify-center px-6 relative overflow-hidden transition-opacity duration-400 ${transitioning ? "opacity-0" : "opacity-100"}`}>
-      <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-        <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-        <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
-      </a>
-
-      {/* Floating emojis */}
-      {["💗", "🌸", "✨"].map((e, i) => (
-        <FloatingEmoji key={i} emoji={e} delay={i * 2} left={15 + i * 30} />
-      ))}
-
-      {/* Progress dots */}
-      <div className="flex gap-2 mb-8">
-        {questions.map((_, i) => (
-          <div
-            key={i}
-            className={`h-2.5 rounded-full transition-all duration-500 ${
-              i < step ? "bg-primary w-8" : i === step - 1 ? "bg-primary w-8" : "bg-border w-2.5"
-            }`}
-          />
-        ))}
-      </div>
-
-      <div className="bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border p-6 md:p-8 max-w-md w-full animate-fade-in-up">
-        <p className="text-xs text-muted-foreground mb-1 text-center">
-          Sawaal {step} / {questions.length}
-        </p>
-        <h2 className="font-display text-lg md:text-xl font-bold text-foreground text-center mb-6">
-          {currentQuestion.question}
-        </h2>
-
-        <div className="grid grid-cols-1 gap-3">
-          {currentQuestion.options.map((option, i) => (
-            <button
-              key={i}
-              onClick={() => handleOptionClick(i)}
-              className={`flex items-center gap-3 p-4 rounded-2xl border transition-all duration-300 hover:scale-[1.02] active:scale-95 text-left ${
-                selectedOption === i
-                  ? "gradient-card shadow-dreamy border-primary/30"
-                  : "bg-card border-border hover:bg-accent/50"
-              }`}
+    <PageTransition>
+      <div className="min-h-screen gradient-hero relative overflow-hidden">
+        <Logo />
+        <AnimatePresence mode="wait">
+          {step === 0 && (
+            <motion.div
+              key="intro"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+              className="min-h-screen flex flex-col items-center justify-center px-6"
             >
-              <span className="text-2xl shrink-0">{option.emoji}</span>
-              <span className="text-sm font-medium text-foreground/80">{option.label}</span>
-            </button>
-          ))}
-        </div>
+              {floatingEmojis.map((e, i) => (
+                <FloatingEmoji key={i} emoji={e} delay={i * 1.5} left={10 + i * 15} />
+              ))}
 
-        <button
-          onClick={handleNext}
-          disabled={selectedOption === null}
-          className={`mt-6 w-full rounded-full py-3 font-semibold text-sm flex items-center justify-center gap-2 transition-all ${
-            selectedOption !== null
-              ? "bg-primary text-primary-foreground hover:shadow-glow hover:scale-[1.02] active:scale-95"
-              : "bg-muted text-muted-foreground cursor-not-allowed"
-          }`}
-        >
-          {step === questions.length ? "Surprise dekhiye! 🎁" : "Aage chaliye →"}
-          <ArrowRight className="w-4 h-4" />
-        </button>
+              <motion.div
+                className="relative mb-6"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+              >
+                <div className="w-36 h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
+                  <span className="text-6xl">💝</span>
+                </div>
+              </motion.div>
+
+              <motion.h1
+                className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Koi bahut special <span className="text-gradient">aapka intezaar</span> kar raha hai 💫
+              </motion.h1>
+              <motion.p
+                className="text-muted-foreground text-center max-w-sm text-sm mb-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                Pehle thoda apne baare mein bataiye… phir milwa denge aapko aapke perfect companion se! 🌸
+              </motion.p>
+
+              <motion.button
+                onClick={handleStart}
+                className="bg-primary text-primary-foreground rounded-full px-8 py-3 font-semibold text-sm flex items-center gap-2 hover:shadow-glow transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                Chaliye Shuru Karte Hain <ArrowRight className="w-4 h-4" />
+              </motion.button>
+
+              <motion.div
+                className="flex items-center gap-1 text-xs text-muted-foreground mt-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              >
+                <Sparkles className="w-3 h-3 text-gold-soft" />
+                Bas 3 sawaal, phir ek pyaara surprise! 🎁
+              </motion.div>
+            </motion.div>
+          )}
+
+          {step >= 1 && step <= 3 && (
+            <motion.div
+              key={`question-${step}`}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+              className="min-h-screen flex flex-col items-center justify-center px-6"
+            >
+              {["💗", "🌸", "✨"].map((e, i) => (
+                <FloatingEmoji key={i} emoji={e} delay={i * 2} left={15 + i * 30} />
+              ))}
+
+              <div className="flex gap-2 mb-8">
+                {questions.map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className={`h-2.5 rounded-full ${
+                      i < step ? "bg-primary" : "bg-border"
+                    }`}
+                    animate={{ width: i < step ? 32 : 10 }}
+                    transition={{ duration: 0.4 }}
+                  />
+                ))}
+              </div>
+
+              <motion.div
+                className="bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border p-6 md:p-8 max-w-md w-full"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <p className="text-xs text-muted-foreground mb-1 text-center">
+                  Sawaal {step} / {questions.length}
+                </p>
+                <h2 className="font-display text-lg md:text-xl font-bold text-foreground text-center mb-6">
+                  {questions[step - 1].question}
+                </h2>
+
+                <div className="grid grid-cols-1 gap-3">
+                  {questions[step - 1].options.map((option, i) => (
+                    <motion.button
+                      key={i}
+                      onClick={() => handleOptionClick(i)}
+                      className={`flex items-center gap-3 p-4 rounded-2xl border transition-colors text-left ${
+                        selectedOption === i
+                          ? "gradient-card shadow-dreamy border-primary/30"
+                          : "bg-card border-border hover:bg-accent/50"
+                      }`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.15 + i * 0.08 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <span className="text-2xl shrink-0">{option.emoji}</span>
+                      <span className="text-sm font-medium text-foreground/80">{option.label}</span>
+                    </motion.button>
+                  ))}
+                </div>
+
+                <motion.button
+                  onClick={handleNext}
+                  disabled={selectedOption === null}
+                  className={`mt-6 w-full rounded-full py-3 font-semibold text-sm flex items-center justify-center gap-2 transition-colors ${
+                    selectedOption !== null
+                      ? "bg-primary text-primary-foreground hover:shadow-glow"
+                      : "bg-muted text-muted-foreground cursor-not-allowed"
+                  }`}
+                  whileHover={selectedOption !== null ? { scale: 1.02 } : {}}
+                  whileTap={selectedOption !== null ? { scale: 0.95 } : {}}
+                >
+                  {step === questions.length ? "Surprise dekhiye! 🎁" : "Aage chaliye →"}
+                  <ArrowRight className="w-4 h-4" />
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          )}
+
+          {step === 4 && (
+            <motion.div
+              key="reveal"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+              className="min-h-screen flex flex-col items-center justify-center px-6"
+            >
+              {["💕", "🌹", "💗", "✨", "🌸", "❤️", "💐", "🦋"].map((e, i) => (
+                <FloatingEmoji key={i} emoji={e} delay={i * 0.8} left={5 + i * 12} />
+              ))}
+
+              <motion.div
+                className="flex items-center gap-1 text-xs text-primary font-semibold mb-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Stars className="w-4 h-4 animate-pulse-soft" />
+                Surprise! 🎉
+              </motion.div>
+
+              <motion.div
+                className="relative mb-6"
+                initial={{ scale: 0, rotate: -10 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 150, damping: 12, delay: 0.3 }}
+              >
+                <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110 animate-pulse-soft" />
+                <img
+                  src={heroCharacter}
+                  alt="Arjun - Your virtual companion"
+                  className="w-56 h-56 object-contain relative z-10 drop-shadow-lg"
+                />
+              </motion.div>
+
+              <motion.h1
+                className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                Miliye <span className="text-gradient">Arjun</span> se 💫
+              </motion.h1>
+              <motion.p
+                className="text-foreground text-center max-w-sm text-sm font-medium mb-2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
+              >
+                {revealLines[answers[0]] || "Main hoon Arjun — aapka virtual companion! 💕"}
+              </motion.p>
+              <motion.p
+                className="text-muted-foreground text-center max-w-xs text-xs mb-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 }}
+              >
+                Aapka virtual companion jo hamesha aapke saath hai — har mood mein, har waqt 💕
+              </motion.p>
+
+              <motion.button
+                onClick={() => navigate("/chat")}
+                className="bg-primary text-primary-foreground rounded-full px-8 py-3 font-semibold text-sm flex items-center gap-2 hover:shadow-glow transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.0 }}
+              >
+                Arjun se baat kariye 💬 <ArrowRight className="w-4 h-4" />
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 
