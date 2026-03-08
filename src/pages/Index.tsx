@@ -108,22 +108,22 @@ const Index = () => {
     <PageTransition>
     <div className="min-h-screen gradient-hero">
       {/* Header */}
-      <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
-        <a href="/" className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-          <Heart className="w-5 h-5 text-primary fill-primary" />
-          <span className="font-display text-lg sm:text-xl font-semibold text-foreground">
+      <header className="flex items-center justify-between px-3 sm:px-6 py-2.5 sm:py-4">
+        <a href="/" className="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity">
+          <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-primary" />
+          <span className="font-display text-base sm:text-xl font-semibold text-foreground">
             Mera Banda
           </span>
         </a>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={toggleMusic}
-            className="flex items-center gap-1 text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border hover:bg-accent/50 transition-all"
+            className="flex items-center gap-1 text-[10px] sm:text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-2.5 py-1.5 rounded-full border border-border hover:bg-accent/50 transition-all"
           >
             {musicOn ? <Music className="w-3 h-3 text-primary" /> : <VolumeX className="w-3 h-3" />}
-            {musicOn ? "Music On 🎵" : "Music Off"}
+            {musicOn ? "🎵" : "Off"}
           </button>
-          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+          <span className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground">
             <Sparkles className="w-3 h-3 text-gold-soft" />
             Always here for you
           </span>
