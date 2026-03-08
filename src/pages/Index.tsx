@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import { startBgMusic, stopBgMusic, isBgMusicPlaying } from "@/lib/sounds";
 import heroCharacter from "@/assets/hero-character.png";
