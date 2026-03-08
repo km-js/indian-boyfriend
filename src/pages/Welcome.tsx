@@ -98,6 +98,7 @@ const Welcome = () => {
 
   useEffect(() => {
     if (step === 4) {
+      playChime();
       fireConfetti();
       const timer = setTimeout(fireConfetti, 1200);
       return () => clearTimeout(timer);
