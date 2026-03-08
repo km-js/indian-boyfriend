@@ -69,7 +69,6 @@ const Index = () => {
   }, [messages]);
 
   const handleEmotionClick = (index: number) => {
-    playTap();
     setActiveEmotion(index);
     setCurrentImage(emotionImages[index]);
     setImageCaption(emotionCaptions[index]);

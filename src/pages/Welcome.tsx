@@ -82,7 +82,6 @@ const Welcome = () => {
   };
 
   const handleOptionClick = (index: number) => {
-    playTap();
     setSelectedOption(index);
   };
 
