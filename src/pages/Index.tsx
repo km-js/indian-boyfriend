@@ -28,20 +28,20 @@ const emotionImages = [
 ];
 
 const emotionCaptions = [
-  "Ye flowers tere liye… please smile kar de 🌹",
-  "Yaaay! Chal celebrate karte hain! 🎉",
+  "Ye flowers aapke liye… please smile kar dijiye 🌹",
+  "Yaaay! Chaliye celebrate karte hain! 🎉",
   "Shhh… sab theek hai, main hoon na 🫂",
-  "Chal chai peete hain saath mein ☕",
-  "Bore mat ho, dekh masti! ✌️",
-  "Ye dil sirf tere liye hai 💝",
-  "Main story sunata hoon, so ja 📖",
-  "Le bahut bada waala hug! 🤗",
+  "Chaliye chai peete hain saath mein ☕",
+  "Bore mat hoiye, dekhiye masti! ✌️",
+  "Ye dil sirf aapke liye hai 💝",
+  "Main story sunata hoon, so jaiye 📖",
+  "Lijiye bahut bada waala hug! 🤗",
 ];
 
 const Index = () => {
   const [activeEmotion, setActiveEmotion] = useState<number | null>(null);
   const [messages, setMessages] = useState<{ text: string; isCharacter: boolean }[]>([
-    { text: "Hey! 🌸 Main hoon Arjun. Tera virtual companion. Bata, aaj kaisa feel ho raha hai?", isCharacter: true },
+    { text: "Hey! 🌸 Main hoon Arjun. Aapka virtual companion. Bataiye, aaj kaisa feel ho raha hai?", isCharacter: true },
   ]);
   const [userInput, setUserInput] = useState("");
   const [currentImage, setCurrentImage] = useState(heroCharacter);
