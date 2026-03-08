@@ -131,8 +131,8 @@ const Index = () => {
       </header>
 
       {/* Emotion Buttons */}
-      <section className="px-2 sm:px-4 pb-3 sm:pb-4">
-        <div className="flex flex-nowrap justify-start sm:justify-center gap-1.5 sm:gap-2 max-w-4xl mx-auto overflow-x-auto pb-2 scrollbar-hide">
+      <section className="px-2 sm:px-4 pb-2 sm:pb-4">
+        <div className="flex flex-nowrap justify-start sm:justify-center gap-1 sm:gap-2 max-w-4xl mx-auto overflow-x-auto pb-1.5 scrollbar-hide px-1">
           {emotions.map((emotion, i) => (
             <EmotionButton
               key={emotion.label}
