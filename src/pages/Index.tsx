@@ -151,29 +151,15 @@ const Index = () => {
           {/* Arjun Character */}
           <div className="flex flex-col items-center justify-center md:w-2/5 shrink-0">
             <div className="relative">
-              <motion.div
-                key={activeEmotion !== null ? `glow-${activeEmotion}` : "glow-default"}
-                className="absolute inset-0 rounded-full blur-3xl scale-110"
-                initial={{ opacity: 0.1, scale: 1 }}
-                animate={activeEmotion !== null ? {
-                  opacity: [0.15, 0.45, 0.25],
-                  scale: [1.1, 1.3, 1.15],
-                  background: "hsl(var(--primary) / 0.3)",
-                } : {
-                  opacity: 0.1,
-                  scale: 1.1,
-                  background: "hsl(var(--primary) / 0.1)",
-                }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-              />
+              <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentImage}
                   src={currentImage}
                   alt="Arjun - Your virtual companion"
                   className="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg"
-                  initial={{ opacity: 0, scale: 0.8, y: 20, filter: "brightness(1.4)" }}
-                  animate={{ opacity: 1, scale: 1, y: 0, filter: "brightness(1)" }}
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: -20 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 />
