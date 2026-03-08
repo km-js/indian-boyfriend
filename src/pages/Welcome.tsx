@@ -5,7 +5,7 @@ import { Heart, Sparkles, ArrowRight, Stars } from "lucide-react";
 import confetti from "canvas-confetti";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { playSwoosh, playChime } from "@/lib/sounds";
+import { playChime } from "@/lib/sounds";
 
 const questions = [
   {
@@ -77,7 +77,6 @@ const Welcome = () => {
   }, []);
 
   const handleStart = () => {
-    playSwoosh();
     setStep(1);
   };
 
@@ -87,7 +86,6 @@ const Welcome = () => {
 
   const handleNext = () => {
     if (selectedOption === null) return;
-    playSwoosh();
     const currentQ = questions[step - 1];
     setAnswers((prev) => [...prev, currentQ.options[selectedOption].label]);
     setSelectedOption(null);

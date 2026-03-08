@@ -89,19 +89,29 @@ export const playMessagePop = (incoming = true) => {
   osc.stop(ctx.currentTime + 0.15);
 };
 
-// ── Background music (soft rain ambience) ──
+// ── Background music (romantic soft rain + gentle melody) ──
 
 let bgPlaying = false;
 let bgSourceNode: AudioBufferSourceNode | null = null;
 let bgGainNode: GainNode | null = null;
+let bgMelodyInterval: ReturnType<typeof setInterval> | null = null;
+let bgMelodySources: OscillatorNode[] = [];
+
+// Romantic melody notes (Raag Yaman-inspired) in Hz
+const MELODY = [
+  261.6, 293.7, 370.0, 392.0,
+  440.0, 493.9, 523.3, 493.9,
+  440.0, 392.0, 370.0, 293.7,
+  261.6, 293.7, 392.0, 261.6,
+];
 
 export const startBgMusic = () => {
   if (bgPlaying) return;
   bgPlaying = true;
   const ctx = getCtx();
 
-  // Create brown-noise-based rain sound
-  const duration = 4; // loop length in seconds
+  // ── Soft rain layer (brown noise) ──
+  const duration = 4;
   const sampleRate = ctx.sampleRate;
   const bufferSize = sampleRate * duration;
   const buffer = ctx.createBuffer(2, bufferSize, sampleRate);
@@ -111,7 +121,6 @@ export const startBgMusic = () => {
     let lastOut = 0;
     for (let i = 0; i < bufferSize; i++) {
       const white = Math.random() * 2 - 1;
-      // Brown noise formula for a warm, rain-like base
       lastOut = (lastOut + 0.02 * white) / 1.02;
       data[i] = lastOut * 3.5;
     }
@@ -121,29 +130,70 @@ export const startBgMusic = () => {
   source.buffer = buffer;
   source.loop = true;
 
-  // Shape it to sound like rain with bandpass
   const bandpass = ctx.createBiquadFilter();
   bandpass.type = "bandpass";
   bandpass.frequency.value = 800;
   bandpass.Q.value = 0.5;
 
-  // Highpass to remove rumble
   const highpass = ctx.createBiquadFilter();
   highpass.type = "highpass";
   highpass.frequency.value = 200;
 
-  // Gentle volume
-  const gain = ctx.createGain();
-  gain.gain.value = 0.18;
+  const rainGain = ctx.createGain();
+  rainGain.gain.value = 0.14;
 
   source.connect(highpass);
   highpass.connect(bandpass);
-  bandpass.connect(gain);
-  gain.connect(ctx.destination);
-
+  bandpass.connect(rainGain);
+  rainGain.connect(ctx.destination);
   source.start();
   bgSourceNode = source;
-  bgGainNode = gain;
+  bgGainNode = rainGain;
+
+  // ── Soft romantic melody layer ──
+  const delay = ctx.createDelay(0.5);
+  delay.delayTime.value = 0.3;
+  const feedback = ctx.createGain();
+  feedback.gain.value = 0.2;
+  delay.connect(feedback);
+  feedback.connect(delay);
+  delay.connect(ctx.destination);
+
+  let noteIndex = 0;
+  bgMelodyInterval = setInterval(() => {
+    if (!bgPlaying) return;
+    const now = ctx.currentTime;
+    const freq = MELODY[noteIndex % MELODY.length];
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    gain.connect(delay);
+
+    // Gentle vibrato
+    const vibrato = ctx.createOscillator();
+    const vibratoGain = ctx.createGain();
+    vibrato.frequency.value = 5;
+    vibratoGain.gain.value = 2;
+    vibrato.connect(vibratoGain);
+    vibratoGain.connect(osc.frequency);
+    vibrato.start(now);
+    vibrato.stop(now + 1.2);
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.04, now + 0.15);
+    gain.gain.setValueAtTime(0.04, now + 0.5);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+    osc.start(now);
+    osc.stop(now + 1.3);
+    bgMelodySources.push(osc);
+
+    noteIndex++;
+  }, 1200);
 };
 
 export const stopBgMusic = () => {
@@ -153,6 +203,12 @@ export const stopBgMusic = () => {
     bgSourceNode = null;
   }
   bgGainNode = null;
+  bgMelodySources.forEach((osc) => { try { osc.stop(); } catch {} });
+  bgMelodySources = [];
+  if (bgMelodyInterval) {
+    clearInterval(bgMelodyInterval);
+    bgMelodyInterval = null;
+  }
 };
 
 export const isBgMusicPlaying = () => bgPlaying;
