@@ -69,6 +69,7 @@ const Index = () => {
   }, [messages]);
 
   const handleEmotionClick = (index: number) => {
+    playTap();
     setActiveEmotion(index);
     setCurrentImage(emotionImages[index]);
     setImageCaption(emotionCaptions[index]);
@@ -81,6 +82,7 @@ const Index = () => {
       { text: `I'm feeling ${emotion.label.toLowerCase()}… ${emotion.emoji}`, isCharacter: false },
       { text: randomResponse, isCharacter: true },
     ]);
+    setTimeout(() => playMessagePop(true), 300);
   };
 
   const handleSendMessage = () => {
