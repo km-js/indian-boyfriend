@@ -5,6 +5,7 @@ import { Heart, Sparkles, ArrowRight, Stars } from "lucide-react";
 import confetti from "canvas-confetti";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
+import { playTap, playSwoosh, playChime } from "@/lib/sounds";
 
 const questions = [
   {
@@ -75,12 +76,20 @@ const Welcome = () => {
     }, 300);
   }, []);
 
-  const handleStart = () => setStep(1);
+  const handleStart = () => {
+    playTap();
+    playSwoosh();
+    setStep(1);
+  };
 
-  const handleOptionClick = (index: number) => setSelectedOption(index);
+  const handleOptionClick = (index: number) => {
+    playTap();
+    setSelectedOption(index);
+  };
 
   const handleNext = () => {
     if (selectedOption === null) return;
+    playSwoosh();
     const currentQ = questions[step - 1];
     setAnswers((prev) => [...prev, currentQ.options[selectedOption].label]);
     setSelectedOption(null);
@@ -89,6 +98,7 @@ const Welcome = () => {
 
   useEffect(() => {
     if (step === 4) {
+      playChime();
       fireConfetti();
       const timer = setTimeout(fireConfetti, 1200);
       return () => clearTimeout(timer);

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import PageTransition from "@/components/PageTransition";
+import { playTap, playMessagePop, startBgMusic, stopBgMusic, isBgMusicPlaying } from "@/lib/sounds";
 import heroCharacter from "@/assets/hero-character.png";
 import arjunSad from "@/assets/arjun-sad.png";
 import arjunHappy from "@/assets/arjun-happy.png";
@@ -12,7 +13,7 @@ import arjunHug from "@/assets/arjun-hug.png";
 import EmotionButton from "@/components/EmotionButton";
 import ChatBubble from "@/components/ChatBubble";
 import { emotions } from "@/data/responses";
-import { Heart, Sparkles, Send } from "lucide-react";
+import { Heart, Sparkles, Send, Music, VolumeX } from "lucide-react";
 
 const emotionImages = [
   arjunSad,
@@ -45,6 +46,21 @@ const Index = () => {
   const [currentImage, setCurrentImage] = useState(heroCharacter);
   const [imageCaption, setImageCaption] = useState("");
   const chatRef = useRef<HTMLDivElement>(null);
+  const [musicOn, setMusicOn] = useState(false);
+
+  const toggleMusic = () => {
+    if (isBgMusicPlaying()) {
+      stopBgMusic();
+      setMusicOn(false);
+    } else {
+      startBgMusic();
+      setMusicOn(true);
+    }
+  };
+
+  useEffect(() => {
+    return () => { stopBgMusic(); };
+  }, []);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -53,6 +69,7 @@ const Index = () => {
   }, [messages]);
 
   const handleEmotionClick = (index: number) => {
+    playTap();
     setActiveEmotion(index);
     setCurrentImage(emotionImages[index]);
     setImageCaption(emotionCaptions[index]);
@@ -65,10 +82,12 @@ const Index = () => {
       { text: `I'm feeling ${emotion.label.toLowerCase()}… ${emotion.emoji}`, isCharacter: false },
       { text: randomResponse, isCharacter: true },
     ]);
+    setTimeout(() => playMessagePop(true), 300);
   };
 
   const handleSendMessage = () => {
     if (!userInput.trim()) return;
+    playMessagePop(false);
     const greetings = [
       "Aww, main samajh sakta hoon 🫂 Tu bahut strong hai!",
       "Haan bata aur, main sun raha hoon… 💕",
@@ -83,6 +102,7 @@ const Index = () => {
       { text: response, isCharacter: true },
     ]);
     setUserInput("");
+    setTimeout(() => playMessagePop(true), 500);
   };
 
   return (
@@ -96,9 +116,18 @@ const Index = () => {
             Mera Banda
           </span>
         </a>
-        <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border">
-          <Sparkles className="w-3 h-3 text-gold-soft" />
-          Always here for you
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleMusic}
+            className="flex items-center gap-1 text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border hover:bg-accent/50 transition-all"
+          >
+            {musicOn ? <Music className="w-3 h-3 text-primary" /> : <VolumeX className="w-3 h-3" />}
+            {musicOn ? "Music On 🎵" : "Music Off"}
+          </button>
+          <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border">
+            <Sparkles className="w-3 h-3 text-gold-soft" />
+            Always here for you
+          </div>
         </div>
       </header>
 
