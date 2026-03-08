@@ -89,11 +89,13 @@ export const playMessagePop = (incoming = true) => {
   osc.stop(ctx.currentTime + 0.15);
 };
 
-// ── Background music (soft Bollywood-romantic melody) ──
+// ── Background music (soft rain + Bollywood-romantic melody) ──
 
 let bgNodes: AudioNode[] = [];
-let bgSources: OscillatorNode[] = [];
+let bgSources: (OscillatorNode | AudioBufferSourceNode)[] = [];
 let bgPlaying = false;
+let bgInterval: ReturnType<typeof setInterval> | null = null;
+let rainSource: AudioBufferSourceNode | null = null;
 let bgInterval: ReturnType<typeof setInterval> | null = null;
 
 // Raag Yaman-inspired notes (romantic Bollywood feel) in Hz
