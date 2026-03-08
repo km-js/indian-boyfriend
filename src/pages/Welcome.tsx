@@ -217,7 +217,7 @@ const Welcome = () => {
               </div>
 
               <motion.div
-                className="bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border p-6 md:p-8 max-w-md w-full"
+                className="bg-card/80 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-dreamy border border-border p-4 sm:p-6 md:p-8 max-w-md w-full"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
