@@ -102,7 +102,7 @@ const Index = () => {
       <section className="px-4 pb-8 max-w-lg mx-auto">
         <div className="bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border overflow-hidden">
           <div className="px-4 py-3 border-b border-border flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse-soft" />
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" />
             <span className="text-xs font-semibold text-foreground">Arjun is online</span>
           </div>
 
