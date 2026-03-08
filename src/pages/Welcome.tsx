@@ -124,10 +124,10 @@ const Welcome = () => {
           <FloatingEmoji key={i} emoji={e} delay={i * 1.5} left={10 + i * 15} />
         ))}
 
-        <div className="absolute top-4 left-6 flex items-center gap-2">
+        <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
           <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-          <span className="font-display text-xl font-semibold text-foreground">Mera Saathi</span>
-        </div>
+          <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+        </a>
 
         <div className="relative mb-6 animate-fade-in-up">
           <div className="w-36 h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
@@ -170,10 +170,10 @@ const Welcome = () => {
           <FloatingEmoji key={i} emoji={e} delay={i * 0.8} left={5 + i * 12} />
         ))}
 
-        <div className="absolute top-4 left-6 flex items-center gap-2">
+        <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
           <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-          <span className="font-display text-xl font-semibold text-foreground">Mera Saathi</span>
-        </div>
+          <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+        </a>
 
         <div className="flex items-center gap-1 text-xs text-primary font-semibold mb-4 animate-fade-in-up">
           <Stars className="w-4 h-4 animate-pulse-soft" />
@@ -215,10 +215,10 @@ const Welcome = () => {
 
   return (
     <div className={`min-h-screen gradient-hero flex flex-col items-center justify-center px-6 relative overflow-hidden transition-opacity duration-400 ${transitioning ? "opacity-0" : "opacity-100"}`}>
-      <div className="absolute top-4 left-6 flex items-center gap-2">
+      <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
         <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-        <span className="font-display text-xl font-semibold text-foreground">Mera Saathi</span>
-      </div>
+        <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+      </a>
 
       {/* Floating emojis */}
       {["💗", "🌸", "✨"].map((e, i) => (
