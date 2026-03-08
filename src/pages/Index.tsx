@@ -100,7 +100,7 @@ const Index = () => {
       { text: response, isCharacter: true },
     ]);
     setUserInput("");
-    setTimeout(() => playMessagePop(true), 500);
+    
   };
 
   return (
