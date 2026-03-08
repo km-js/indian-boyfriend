@@ -73,6 +73,24 @@ export const playChime = () => {
   });
 };
 
+/** Cute emotion change sound — rising sparkle */
+export const playEmotionChange = () => {
+  const ctx = getCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "sine";
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.frequency.setValueAtTime(400, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(900, ctx.currentTime + 0.15);
+  osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.25);
+  gain.gain.setValueAtTime(0.12, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.1);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.3);
+};
+
 /** Soft pop for incoming/outgoing messages */
 export const playMessagePop = (incoming = true) => {
   const ctx = getCtx();

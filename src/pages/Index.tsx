@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { startBgMusic, stopBgMusic, isBgMusicPlaying } from "@/lib/sounds";
+import { startBgMusic, stopBgMusic, isBgMusicPlaying, playEmotionChange } from "@/lib/sounds";
 import heroCharacter from "@/assets/hero-character.png";
 import arjunSad from "@/assets/arjun-sad.png";
 import arjunHappy from "@/assets/arjun-happy.png";
@@ -72,6 +72,7 @@ const Index = () => {
   const handleEmotionClick = (index: number) => {
     setActiveEmotion(index);
     setCurrentImage(emotionImages[index]);
+    playEmotionChange();
     setImageCaption(emotionCaptions[index]);
     
     const emotion = emotions[index];
