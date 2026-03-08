@@ -94,10 +94,66 @@ export const playMessagePop = (incoming = true) => {
 let bgPlaying = false;
 let bgChirpInterval: ReturnType<typeof setInterval> | null = null;
 let bgChirpSources: OscillatorNode[] = [];
+let rainSource: AudioBufferSourceNode | null = null;
+let rainGain: GainNode | null = null;
+
+/** Start a continuous soft rain layer */
+const startRain = (ctx: AudioContext) => {
+  const duration = 4; // seconds of buffer, looped
+  const bufferSize = ctx.sampleRate * duration;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+
+  // Brown noise for natural rain texture
+  let last = 0;
+  for (let i = 0; i < bufferSize; i++) {
+    const white = Math.random() * 2 - 1;
+    last = (last + 0.02 * white) / 1.02;
+    data[i] = last * 3.5;
+  }
+
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+
+  // Bandpass to shape rain character
+  const bp = ctx.createBiquadFilter();
+  bp.type = "bandpass";
+  bp.frequency.value = 1000;
+  bp.Q.value = 0.5;
+
+  // Highpass to remove rumble
+  const hp = ctx.createBiquadFilter();
+  hp.type = "highpass";
+  hp.frequency.value = 300;
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0, ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.08, ctx.currentTime + 2); // gentle fade in
+
+  source.connect(bp);
+  bp.connect(hp);
+  hp.connect(gain);
+  gain.connect(ctx.destination);
+  source.start();
+
+  rainSource = source;
+  rainGain = gain;
+};
+
+const stopRain = (ctx: AudioContext) => {
+  if (rainGain) {
+    rainGain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 1);
+  }
+  setTimeout(() => {
+    try { rainSource?.stop(); } catch {}
+    rainSource = null;
+    rainGain = null;
+  }, 1200);
+};
 
 /** Single bird chirp — short sine sweep with harmonics */
 const playChirp = (ctx: AudioContext, baseFreq: number, volume: number, time: number) => {
-  // Main tone
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = "sine";
@@ -137,7 +193,7 @@ const playChirp = (ctx: AudioContext, baseFreq: number, volume: number, time: nu
 const playBirdPhrase = (ctx: AudioContext) => {
   const now = ctx.currentTime;
   const noteCount = 2 + Math.floor(Math.random() * 4);
-  const baseFreq = 1800 + Math.random() * 2000; // Different bird species
+  const baseFreq = 1800 + Math.random() * 2000;
   const vol = 0.04 + Math.random() * 0.04;
 
   for (let i = 0; i < noteCount; i++) {
@@ -152,16 +208,18 @@ export const startBgMusic = () => {
   bgPlaying = true;
   const ctx = getCtx();
 
+  // Start rain layer
+  startRain(ctx);
+
   // Play initial chirps
   playBirdPhrase(ctx);
   setTimeout(() => bgPlaying && playBirdPhrase(ctx), 600);
 
-  // Random chirps at varying intervals for a natural feel
+  // Random chirps at varying intervals
   bgChirpInterval = setInterval(() => {
     if (!bgPlaying) return;
     playBirdPhrase(ctx);
 
-    // Sometimes a second bird responds
     if (Math.random() > 0.5) {
       setTimeout(() => {
         if (bgPlaying) playBirdPhrase(ctx);
@@ -172,6 +230,11 @@ export const startBgMusic = () => {
 
 export const stopBgMusic = () => {
   bgPlaying = false;
+  const ctx = getCtx();
+
+  // Fade out rain
+  stopRain(ctx);
+
   bgChirpSources.forEach((osc) => { try { osc.stop(); } catch {} });
   bgChirpSources = [];
   if (bgChirpInterval) {
