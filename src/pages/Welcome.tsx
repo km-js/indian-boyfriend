@@ -5,7 +5,7 @@ import { Heart, Sparkles, ArrowRight, Stars } from "lucide-react";
 import confetti from "canvas-confetti";
 import { motion, AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
-import { playSwoosh, playChime } from "@/lib/sounds";
+import { playChime } from "@/lib/sounds";
 
 const questions = [
   {
