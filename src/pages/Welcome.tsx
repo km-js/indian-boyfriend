@@ -215,10 +215,10 @@ const Welcome = () => {
 
   return (
     <div className={`min-h-screen gradient-hero flex flex-col items-center justify-center px-6 relative overflow-hidden transition-opacity duration-400 ${transitioning ? "opacity-0" : "opacity-100"}`}>
-      <div className="absolute top-4 left-6 flex items-center gap-2">
+      <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
         <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-        <span className="font-display text-xl font-semibold text-foreground">Mera Saathi</span>
-      </div>
+        <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+      </a>
 
       {/* Floating emojis */}
       {["💗", "🌸", "✨"].map((e, i) => (

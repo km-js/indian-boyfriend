@@ -126,7 +126,7 @@ const Index = () => {
                 key={currentImage}
                 src={currentImage}
                 alt="Arjun - Your virtual companion"
-                className="w-52 h-52 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg animate-fade-in-up transition-all duration-500"
+                className="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg animate-fade-in-up transition-all duration-500"
               />
             </div>
             {imageCaption ? (
