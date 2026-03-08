@@ -112,9 +112,9 @@ const Welcome = () => {
   const pageTransition = { duration: 0.45, ease: [0.4, 0, 0.2, 1] as const };
 
   const Logo = () => (
-    <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity z-20">
-      <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-      <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+    <a href="/" className="absolute top-3 left-3 sm:top-4 sm:left-6 flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity z-20">
+      <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-primary animate-pulse-soft" />
+      <span className="font-display text-base sm:text-xl font-semibold text-foreground">Mera Banda</span>
     </a>
   );
 
