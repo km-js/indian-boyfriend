@@ -124,7 +124,7 @@ const Welcome = () => {
           <FloatingEmoji key={i} emoji={e} delay={i * 1.5} left={10 + i * 15} />
         ))}
 
-        <div className="absolute top-4 left-6 flex items-center gap-2">
+        <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
           <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
           <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
         </a>
