@@ -112,9 +112,9 @@ const Welcome = () => {
   const pageTransition = { duration: 0.45, ease: [0.4, 0, 0.2, 1] as const };
 
   const Logo = () => (
-    <a href="/" className="absolute top-4 left-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity z-20">
-      <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-      <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+    <a href="/" className="absolute top-3 left-3 sm:top-4 sm:left-6 flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity z-20">
+      <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-primary fill-primary animate-pulse-soft" />
+      <span className="font-display text-base sm:text-xl font-semibold text-foreground">Mera Banda</span>
     </a>
   );
 
@@ -131,7 +131,7 @@ const Welcome = () => {
               animate="animate"
               exit="exit"
               transition={pageTransition}
-              className="min-h-screen flex flex-col items-center justify-center px-6"
+              className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6"
             >
               {floatingEmojis.map((e, i) => (
                 <FloatingEmoji key={i} emoji={e} delay={i * 1.5} left={10 + i * 15} />
@@ -143,13 +143,13 @@ const Welcome = () => {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
               >
-                <div className="w-36 h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
-                  <span className="text-6xl">💝</span>
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
+                  <span className="text-5xl sm:text-6xl">💝</span>
                 </div>
               </motion.div>
 
               <motion.h1
-                className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-2"
+                className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-center text-foreground mb-2"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -197,7 +197,7 @@ const Welcome = () => {
               animate="animate"
               exit="exit"
               transition={pageTransition}
-              className="min-h-screen flex flex-col items-center justify-center px-6"
+              className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6"
             >
               {["💗", "🌸", "✨"].map((e, i) => (
                 <FloatingEmoji key={i} emoji={e} delay={i * 2} left={15 + i * 30} />
@@ -217,7 +217,7 @@ const Welcome = () => {
               </div>
 
               <motion.div
-                className="bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border p-6 md:p-8 max-w-md w-full"
+                className="bg-card/80 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-dreamy border border-border p-4 sm:p-6 md:p-8 max-w-md w-full"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
@@ -277,7 +277,7 @@ const Welcome = () => {
               animate="animate"
               exit="exit"
               transition={pageTransition}
-              className="min-h-screen flex flex-col items-center justify-center px-6"
+              className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6"
             >
               {["💕", "🌹", "💗", "✨", "🌸", "❤️", "💐", "🦋"].map((e, i) => (
                 <FloatingEmoji key={i} emoji={e} delay={i * 0.8} left={5 + i * 12} />
@@ -303,12 +303,12 @@ const Welcome = () => {
                 <img
                   src={heroCharacter}
                   alt="Arjun - Your virtual companion"
-                  className="w-56 h-56 object-contain relative z-10 drop-shadow-lg"
+                  className="w-40 h-40 sm:w-56 sm:h-56 object-contain relative z-10 drop-shadow-lg"
                 />
               </motion.div>
 
               <motion.h1
-                className="font-display text-3xl md:text-4xl font-bold text-center text-foreground mb-2"
+                className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-center text-foreground mb-2"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
