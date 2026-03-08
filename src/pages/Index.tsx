@@ -122,10 +122,10 @@ const Index = () => {
             {musicOn ? <Music className="w-3 h-3 text-primary" /> : <VolumeX className="w-3 h-3" />}
             {musicOn ? "Music On 🎵" : "Music Off"}
           </button>
-          <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border">
+          <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <Sparkles className="w-3 h-3 text-gold-soft" />
             Always here for you
-          </div>
+          </span>
         </div>
       </header>
 
