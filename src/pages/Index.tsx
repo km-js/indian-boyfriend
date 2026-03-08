@@ -189,6 +189,7 @@ const Index = () => {
         Made with 💕 for you — because you deserve to feel special
       </footer>
     </div>
+    </PageTransition>
   );
 };
 
