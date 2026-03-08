@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import PageTransition from "@/components/PageTransition";
-import { playMessagePop, startBgMusic, stopBgMusic, isBgMusicPlaying } from "@/lib/sounds";
+import { startBgMusic, stopBgMusic, isBgMusicPlaying } from "@/lib/sounds";
 import heroCharacter from "@/assets/hero-character.png";
 import arjunSad from "@/assets/arjun-sad.png";
 import arjunHappy from "@/assets/arjun-happy.png";
@@ -81,12 +81,11 @@ const Index = () => {
       { text: `I'm feeling ${emotion.label.toLowerCase()}… ${emotion.emoji}`, isCharacter: false },
       { text: randomResponse, isCharacter: true },
     ]);
-    setTimeout(() => playMessagePop(true), 300);
+    
   };
 
   const handleSendMessage = () => {
     if (!userInput.trim()) return;
-    playMessagePop(false);
     const greetings = [
       "Aww, main samajh sakta hoon 🫂 Tu bahut strong hai!",
       "Haan bata aur, main sun raha hoon… 💕",
@@ -101,7 +100,7 @@ const Index = () => {
       { text: response, isCharacter: true },
     ]);
     setUserInput("");
-    setTimeout(() => playMessagePop(true), 500);
+    
   };
 
   return (
@@ -123,10 +122,10 @@ const Index = () => {
             {musicOn ? <Music className="w-3 h-3 text-primary" /> : <VolumeX className="w-3 h-3" />}
             {musicOn ? "Music On 🎵" : "Music Off"}
           </button>
-          <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground bg-card/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border">
+          <span className="flex items-center gap-1 text-xs text-muted-foreground">
             <Sparkles className="w-3 h-3 text-gold-soft" />
             Always here for you
-          </div>
+          </span>
         </div>
       </header>
 

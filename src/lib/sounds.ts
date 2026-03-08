@@ -89,106 +89,70 @@ export const playMessagePop = (incoming = true) => {
   osc.stop(ctx.currentTime + 0.15);
 };
 
-// ── Background music (soft Bollywood-romantic melody) ──
+// ── Background music (soft rain ambience) ──
 
-let bgNodes: AudioNode[] = [];
-let bgSources: OscillatorNode[] = [];
 let bgPlaying = false;
-let bgInterval: ReturnType<typeof setInterval> | null = null;
-
-// Raag Yaman-inspired notes (romantic Bollywood feel) in Hz
-// Sa Re Ga(tivra) Ma Pa Dha Ni Sa — C D F# G A B C
-const MELODY = [
-  // Phrase 1: ascending
-  261.6, 293.7, 370.0, 392.0,
-  // Phrase 2: pause on Pa, descend
-  440.0, 493.9, 523.3, 493.9,
-  // Phrase 3: gentle descent
-  440.0, 392.0, 370.0, 293.7,
-  // Phrase 4: resolve
-  261.6, 293.7, 392.0, 261.6,
-];
+let bgSourceNode: AudioBufferSourceNode | null = null;
+let bgGainNode: GainNode | null = null;
 
 export const startBgMusic = () => {
   if (bgPlaying) return;
   bgPlaying = true;
   const ctx = getCtx();
 
-  // Soft tanpura-like drone (Sa + Pa)
-  const createDrone = (freq: number, vol: number) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.value = freq;
-    gain.gain.value = vol;
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    bgSources.push(osc);
-    bgNodes.push(gain);
-  };
+  // Create brown-noise-based rain sound
+  const duration = 4; // loop length in seconds
+  const sampleRate = ctx.sampleRate;
+  const bufferSize = sampleRate * duration;
+  const buffer = ctx.createBuffer(2, bufferSize, sampleRate);
 
-  createDrone(130.8, 0.035); // Sa (low)
-  createDrone(196.0, 0.02);  // Pa (low)
-  createDrone(261.6, 0.015); // Sa (mid, soft)
+  for (let ch = 0; ch < 2; ch++) {
+    const data = buffer.getChannelData(ch);
+    let lastOut = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      // Brown noise formula for a warm, rain-like base
+      lastOut = (lastOut + 0.02 * white) / 1.02;
+      data[i] = lastOut * 3.5;
+    }
+  }
 
-  // Reverb-like delay for warmth
-  const delay = ctx.createDelay(0.5);
-  delay.delayTime.value = 0.3;
-  const feedback = ctx.createGain();
-  feedback.gain.value = 0.25;
-  delay.connect(feedback);
-  feedback.connect(delay);
-  delay.connect(ctx.destination);
-  bgNodes.push(delay, feedback);
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
 
-  // Melody loop
-  let noteIndex = 0;
-  bgInterval = setInterval(() => {
-    if (!bgPlaying) return;
-    const now = ctx.currentTime;
-    const freq = MELODY[noteIndex % MELODY.length];
+  // Shape it to sound like rain with bandpass
+  const bandpass = ctx.createBiquadFilter();
+  bandpass.type = "bandpass";
+  bandpass.frequency.value = 800;
+  bandpass.Q.value = 0.5;
 
-    // Main note (triangle for flute-like warmth)
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "triangle";
-    osc.frequency.value = freq;
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    gain.connect(delay); // feed into delay for reverb
+  // Highpass to remove rumble
+  const highpass = ctx.createBiquadFilter();
+  highpass.type = "highpass";
+  highpass.frequency.value = 200;
 
-    // Gentle vibrato
-    const vibrato = ctx.createOscillator();
-    const vibratoGain = ctx.createGain();
-    vibrato.frequency.value = 5;
-    vibratoGain.gain.value = 2;
-    vibrato.connect(vibratoGain);
-    vibratoGain.connect(osc.frequency);
-    vibrato.start(now);
-    vibrato.stop(now + 1.2);
+  // Gentle volume
+  const gain = ctx.createGain();
+  gain.gain.value = 0.18;
 
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.055, now + 0.15);
-    gain.gain.setValueAtTime(0.055, now + 0.5);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+  source.connect(highpass);
+  highpass.connect(bandpass);
+  bandpass.connect(gain);
+  gain.connect(ctx.destination);
 
-    osc.start(now);
-    osc.stop(now + 1.3);
-
-    noteIndex++;
-  }, 1000);
+  source.start();
+  bgSourceNode = source;
+  bgGainNode = gain;
 };
 
 export const stopBgMusic = () => {
   bgPlaying = false;
-  bgSources.forEach((osc) => { try { osc.stop(); } catch {} });
-  bgSources = [];
-  bgNodes = [];
-  if (bgInterval) {
-    clearInterval(bgInterval);
-    bgInterval = null;
+  if (bgSourceNode) {
+    try { bgSourceNode.stop(); } catch {}
+    bgSourceNode = null;
   }
+  bgGainNode = null;
 };
 
 export const isBgMusicPlaying = () => bgPlaying;
