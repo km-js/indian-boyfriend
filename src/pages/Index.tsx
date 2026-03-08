@@ -182,15 +182,15 @@ const Index = () => {
           </div>
 
           {/* Chat Section */}
-          <div className="w-full md:w-3/5 bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border overflow-hidden flex flex-col">
-            <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+          <div className="w-full md:w-3/5 bg-card/80 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-dreamy border border-border overflow-hidden flex flex-col min-h-[280px] sm:min-h-0">
+            <div className="px-3 sm:px-4 py-2 sm:py-3 border-b border-border flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" />
-              <span className="text-xs font-semibold text-foreground">Arjun is online</span>
+              <span className="text-[10px] sm:text-xs font-semibold text-foreground">Arjun is online</span>
             </div>
 
             <div
               ref={chatRef}
-              className="flex flex-col gap-3 p-4 flex-1 max-h-96 overflow-y-auto scroll-smooth"
+              className="flex flex-col gap-2 sm:gap-3 p-3 sm:p-4 flex-1 max-h-[50vh] sm:max-h-96 overflow-y-auto scroll-smooth"
             >
               {messages.map((msg, i) => (
                 <ChatBubble key={i} message={msg.text} isCharacter={msg.isCharacter} />
@@ -198,18 +198,18 @@ const Index = () => {
             </div>
 
             {/* Input */}
-            <div className="p-3 border-t border-border flex gap-2">
+            <div className="p-2 sm:p-3 border-t border-border flex gap-2">
               <input
                 type="text"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                placeholder="Kuch bhi bol de… 💬"
-                className="flex-1 bg-muted/50 rounded-full px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                placeholder="Kuch bhi boliye… 💬"
+                className="flex-1 bg-muted/50 rounded-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all"
               />
               <button
                 onClick={handleSendMessage}
-                className="bg-primary text-primary-foreground rounded-full w-10 h-10 flex items-center justify-center hover:shadow-glow transition-all hover:scale-105 active:scale-95"
+                className="bg-primary text-primary-foreground rounded-full w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center hover:shadow-glow transition-all hover:scale-105 active:scale-95 shrink-0"
               >
                 <Send className="w-4 h-4" />
               </button>
@@ -219,7 +219,7 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-6 text-xs text-muted-foreground">
+      <footer className="text-center py-3 sm:py-6 text-[10px] sm:text-xs text-muted-foreground">
         Made with 💕 for you — because you deserve to feel special
       </footer>
     </div>
