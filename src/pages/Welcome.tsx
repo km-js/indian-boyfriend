@@ -76,12 +76,20 @@ const Welcome = () => {
     }, 300);
   }, []);
 
-  const handleStart = () => setStep(1);
+  const handleStart = () => {
+    playTap();
+    playSwoosh();
+    setStep(1);
+  };
 
-  const handleOptionClick = (index: number) => setSelectedOption(index);
+  const handleOptionClick = (index: number) => {
+    playTap();
+    setSelectedOption(index);
+  };
 
   const handleNext = () => {
     if (selectedOption === null) return;
+    playSwoosh();
     const currentQ = questions[step - 1];
     setAnswers((prev) => [...prev, currentQ.options[selectedOption].label]);
     setSelectedOption(null);
