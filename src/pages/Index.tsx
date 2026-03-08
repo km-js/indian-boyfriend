@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import PageTransition from "@/components/PageTransition";
 import heroCharacter from "@/assets/hero-character.png";
 import arjunSad from "@/assets/arjun-sad.png";
 import arjunHappy from "@/assets/arjun-happy.png";
@@ -85,6 +86,7 @@ const Index = () => {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen gradient-hero">
       {/* Header */}
       <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
@@ -187,6 +189,7 @@ const Index = () => {
         Made with 💕 for you — because you deserve to feel special
       </footer>
     </div>
+    </PageTransition>
   );
 };
 
