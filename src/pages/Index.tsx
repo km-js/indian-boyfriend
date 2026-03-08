@@ -81,7 +81,7 @@ const Index = () => {
       { text: `I'm feeling ${emotion.label.toLowerCase()}… ${emotion.emoji}`, isCharacter: false },
       { text: randomResponse, isCharacter: true },
     ]);
-    setTimeout(() => playMessagePop(true), 300);
+    
   };
 
   const handleSendMessage = () => {
