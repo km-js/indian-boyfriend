@@ -72,6 +72,7 @@ const Index = () => {
   const handleEmotionClick = (index: number) => {
     setActiveEmotion(index);
     setCurrentImage(emotionImages[index]);
+    playEmotionChange();
     setImageCaption(emotionCaptions[index]);
     
     const emotion = emotions[index];
