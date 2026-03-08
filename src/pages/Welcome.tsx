@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import heroCharacter from "@/assets/hero-character.png";
 import { Heart, Sparkles, ArrowRight, Stars } from "lucide-react";
 import confetti from "canvas-confetti";
+import { motion, AnimatePresence } from "framer-motion";
+import PageTransition from "@/components/PageTransition";
 
 const questions = [
   {

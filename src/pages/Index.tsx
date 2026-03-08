@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import PageTransition from "@/components/PageTransition";
 import heroCharacter from "@/assets/hero-character.png";
 import arjunSad from "@/assets/arjun-sad.png";
 import arjunHappy from "@/assets/arjun-happy.png";
