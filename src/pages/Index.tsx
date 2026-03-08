@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import PageTransition from "@/components/PageTransition";
-import { playMessagePop, startBgMusic, stopBgMusic, isBgMusicPlaying } from "@/lib/sounds";
+import { startBgMusic, stopBgMusic, isBgMusicPlaying } from "@/lib/sounds";
 import heroCharacter from "@/assets/hero-character.png";
 import arjunSad from "@/assets/arjun-sad.png";
 import arjunHappy from "@/assets/arjun-happy.png";
