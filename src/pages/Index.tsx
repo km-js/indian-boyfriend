@@ -13,7 +13,7 @@ import arjunHug from "@/assets/arjun-hug.png";
 import EmotionButton from "@/components/EmotionButton";
 import ChatBubble from "@/components/ChatBubble";
 import { emotions } from "@/data/responses";
-import { Heart, Sparkles, Send } from "lucide-react";
+import { Heart, Sparkles, Send, Music, MusicOff } from "lucide-react";
 
 const emotionImages = [
   arjunSad,
