@@ -89,17 +89,24 @@ export const playMessagePop = (incoming = true) => {
   osc.stop(ctx.currentTime + 0.15);
 };
 
-// ── Background music (looping gentle melody) ──
+// ── Background music (soft Bollywood-romantic melody) ──
 
-let bgOscillators: OscillatorNode[] = [];
-let bgGains: GainNode[] = [];
+let bgNodes: AudioNode[] = [];
+let bgSources: OscillatorNode[] = [];
 let bgPlaying = false;
 let bgInterval: ReturnType<typeof setInterval> | null = null;
 
-const BGM_NOTES = [
-  // A gentle pentatonic lullaby loop
-  392, 440, 494, 523, 587, 523, 494, 440,
-  392, 349, 330, 349, 392, 440, 494, 440,
+// Raag Yaman-inspired notes (romantic Bollywood feel) in Hz
+// Sa Re Ga(tivra) Ma Pa Dha Ni Sa — C D F# G A B C
+const MELODY = [
+  // Phrase 1: ascending
+  261.6, 293.7, 370.0, 392.0,
+  // Phrase 2: pause on Pa, descend
+  440.0, 493.9, 523.3, 493.9,
+  // Phrase 3: gentle descent
+  440.0, 392.0, 370.0, 293.7,
+  // Phrase 4: resolve
+  261.6, 293.7, 392.0, 261.6,
 ];
 
 export const startBgMusic = () => {
@@ -107,54 +114,77 @@ export const startBgMusic = () => {
   bgPlaying = true;
   const ctx = getCtx();
 
-  // Soft pad drone
-  const pad = ctx.createOscillator();
-  const padGain = ctx.createGain();
-  pad.type = "sine";
-  pad.frequency.value = 220;
-  padGain.gain.value = 0.04;
-  pad.connect(padGain);
-  padGain.connect(ctx.destination);
-  pad.start();
-  bgOscillators.push(pad);
-  bgGains.push(padGain);
+  // Soft tanpura-like drone (Sa + Pa)
+  const createDrone = (freq: number, vol: number) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    gain.gain.value = vol;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    bgSources.push(osc);
+    bgNodes.push(gain);
+  };
 
-  // Second harmonic
-  const pad2 = ctx.createOscillator();
-  const pad2Gain = ctx.createGain();
-  pad2.type = "sine";
-  pad2.frequency.value = 330;
-  pad2Gain.gain.value = 0.025;
-  pad2.connect(pad2Gain);
-  pad2Gain.connect(ctx.destination);
-  pad2.start();
-  bgOscillators.push(pad2);
-  bgGains.push(pad2Gain);
+  createDrone(130.8, 0.035); // Sa (low)
+  createDrone(196.0, 0.02);  // Pa (low)
+  createDrone(261.6, 0.015); // Sa (mid, soft)
 
-  // Melody notes
+  // Reverb-like delay for warmth
+  const delay = ctx.createDelay(0.5);
+  delay.delayTime.value = 0.3;
+  const feedback = ctx.createGain();
+  feedback.gain.value = 0.25;
+  delay.connect(feedback);
+  feedback.connect(delay);
+  delay.connect(ctx.destination);
+  bgNodes.push(delay, feedback);
+
+  // Melody loop
   let noteIndex = 0;
   bgInterval = setInterval(() => {
     if (!bgPlaying) return;
+    const now = ctx.currentTime;
+    const freq = MELODY[noteIndex % MELODY.length];
+
+    // Main note (triangle for flute-like warmth)
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "triangle";
-    osc.frequency.value = BGM_NOTES[noteIndex % BGM_NOTES.length];
+    osc.frequency.value = freq;
     osc.connect(gain);
     gain.connect(ctx.destination);
-    gain.gain.setValueAtTime(0, ctx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 0.1);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.7);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.8);
+    gain.connect(delay); // feed into delay for reverb
+
+    // Gentle vibrato
+    const vibrato = ctx.createOscillator();
+    const vibratoGain = ctx.createGain();
+    vibrato.frequency.value = 5;
+    vibratoGain.gain.value = 2;
+    vibrato.connect(vibratoGain);
+    vibratoGain.connect(osc.frequency);
+    vibrato.start(now);
+    vibrato.stop(now + 1.2);
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.055, now + 0.15);
+    gain.gain.setValueAtTime(0.055, now + 0.5);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+    osc.start(now);
+    osc.stop(now + 1.3);
+
     noteIndex++;
-  }, 800);
+  }, 1000);
 };
 
 export const stopBgMusic = () => {
   bgPlaying = false;
-  bgOscillators.forEach((osc) => { try { osc.stop(); } catch {} });
-  bgOscillators = [];
-  bgGains = [];
+  bgSources.forEach((osc) => { try { osc.stop(); } catch {} });
+  bgSources = [];
+  bgNodes = [];
   if (bgInterval) {
     clearInterval(bgInterval);
     bgInterval = null;
