@@ -7,7 +7,51 @@ const getCtx = () => {
   return audioCtx;
 };
 
-/** Quick blip for UI feedback */
+/** Swoosh transition between steps */
+export const playSwoosh = () => {
+  const ctx = getCtx();
+  const bufferSize = ctx.sampleRate * 0.25;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  }
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  const bandpass = ctx.createBiquadFilter();
+  bandpass.type = "bandpass";
+  bandpass.frequency.setValueAtTime(2000, ctx.currentTime);
+  bandpass.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.2);
+  bandpass.Q.value = 2;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.2, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+  source.connect(bandpass);
+  bandpass.connect(gain);
+  gain.connect(ctx.destination);
+  source.start(ctx.currentTime);
+};
+
+/** Magical chime / sparkle for reveal */
+export const playChime = () => {
+  const ctx = getCtx();
+  const notes = [523, 659, 784, 1047];
+  notes.forEach((freq, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    const startTime = ctx.currentTime + i * 0.12;
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(0.15, startTime + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.6);
+    osc.start(startTime);
+    osc.stop(startTime + 0.6);
+  });
+};
+
 export const playBlip = () => {
   const ctx = getCtx();
   const osc = ctx.createOscillator();
