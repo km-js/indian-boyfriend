@@ -146,9 +146,9 @@ const Index = () => {
       </section>
 
       {/* Arjun + Chat Side by Side */}
-      <section className="px-3 sm:px-4 pb-6 sm:pb-8 max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-center md:items-stretch">
-          {/* Arjun Character */}
+      <section className="px-2 sm:px-4 pb-4 sm:pb-8 max-w-5xl mx-auto flex-1 flex flex-col">
+        <div className="flex flex-col md:flex-row gap-3 sm:gap-6 items-center md:items-stretch flex-1">
+          {/* Arjun Character - smaller on mobile */}
           <div className="flex flex-col items-center justify-center md:w-2/5 shrink-0">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
@@ -157,7 +157,7 @@ const Index = () => {
                   key={currentImage}
                   src={currentImage}
                   alt="Arjun - Your virtual companion"
-                  className="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg"
+                  className="w-28 h-28 sm:w-44 sm:h-44 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg"
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: -20 }}
@@ -166,15 +166,15 @@ const Index = () => {
               </AnimatePresence>
             </div>
             {imageCaption ? (
-              <p className="mt-3 text-sm font-semibold text-primary animate-fade-in-up text-center">
+              <p className="mt-2 text-xs sm:text-sm font-semibold text-primary animate-fade-in-up text-center">
                 {imageCaption}
               </p>
             ) : (
               <>
-                <h1 className="font-display text-2xl md:text-3xl font-bold text-center mt-4 text-foreground">
+                <h1 className="font-display text-lg sm:text-2xl md:text-3xl font-bold text-center mt-2 sm:mt-4 text-foreground">
                   Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
                 </h1>
-                <p className="text-muted-foreground text-center mt-2 max-w-xs text-sm">
+                <p className="text-muted-foreground text-center mt-1 sm:mt-2 max-w-xs text-xs sm:text-sm">
                   Aapka virtual companion jo hamesha aapke saath hai 💕
                 </p>
               </>
