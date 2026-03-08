@@ -100,36 +100,9 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="flex flex-col items-center pt-4 pb-6 px-4">
-        <div className="relative">
-          <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
-          <img
-            key={currentImage}
-            src={currentImage}
-            alt="Arjun - Your virtual companion"
-            className="w-48 h-48 md:w-56 md:h-56 object-contain relative z-10 drop-shadow-lg animate-fade-in-up transition-all duration-500"
-          />
-        </div>
-        {imageCaption ? (
-          <p className="mt-3 text-sm font-semibold text-primary animate-fade-in-up text-center">
-            {imageCaption}
-          </p>
-        ) : (
-          <>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-center mt-4 text-foreground">
-              Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
-            </h1>
-            <p className="text-muted-foreground text-center mt-2 max-w-md text-sm">
-              Tera virtual companion jo hamesha tere saath hai — khushi ho ya gham. Bata, aaj kaisa feel ho raha hai?
-            </p>
-          </>
-        )}
-      </section>
-
       {/* Emotion Buttons */}
       <section className="px-4 pb-4">
-        <div className="flex flex-wrap justify-center gap-2.5 max-w-lg mx-auto">
+        <div className="flex flex-wrap justify-center gap-2.5 max-w-2xl mx-auto">
           {emotions.map((emotion, i) => (
             <EmotionButton
               key={emotion.label}
@@ -142,39 +115,69 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Chat Section */}
-      <section className="px-4 pb-8 max-w-lg mx-auto">
-        <div className="bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border overflow-hidden">
-          <div className="px-4 py-3 border-b border-border flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" />
-            <span className="text-xs font-semibold text-foreground">Arjun is online</span>
+      {/* Arjun + Chat Side by Side */}
+      <section className="px-4 pb-8 max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-6 items-center md:items-stretch">
+          {/* Arjun Character */}
+          <div className="flex flex-col items-center justify-center md:w-2/5 shrink-0">
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
+              <img
+                key={currentImage}
+                src={currentImage}
+                alt="Arjun - Your virtual companion"
+                className="w-52 h-52 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg animate-fade-in-up transition-all duration-500"
+              />
+            </div>
+            {imageCaption ? (
+              <p className="mt-3 text-sm font-semibold text-primary animate-fade-in-up text-center">
+                {imageCaption}
+              </p>
+            ) : (
+              <>
+                <h1 className="font-display text-2xl md:text-3xl font-bold text-center mt-4 text-foreground">
+                  Hey Beautiful! <span className="text-gradient">I'm Arjun</span> 💫
+                </h1>
+                <p className="text-muted-foreground text-center mt-2 max-w-xs text-sm">
+                  Tera virtual companion jo hamesha tere saath hai 💕
+                </p>
+              </>
+            )}
           </div>
 
-          <div
-            ref={chatRef}
-            className="flex flex-col gap-3 p-4 max-h-80 overflow-y-auto scroll-smooth"
-          >
-            {messages.map((msg, i) => (
-              <ChatBubble key={i} message={msg.text} isCharacter={msg.isCharacter} />
-            ))}
-          </div>
+          {/* Chat Section */}
+          <div className="w-full md:w-3/5 bg-card/80 backdrop-blur-md rounded-3xl shadow-dreamy border border-border overflow-hidden flex flex-col">
+            <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-primary animate-pulse-soft" />
+              <span className="text-xs font-semibold text-foreground">Arjun is online</span>
+            </div>
 
-          {/* Input */}
-          <div className="p-3 border-t border-border flex gap-2">
-            <input
-              type="text"
-              value={userInput}
-              onChange={(e) => setUserInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-              placeholder="Kuch bhi bol de… 💬"
-              className="flex-1 bg-muted/50 rounded-full px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all"
-            />
-            <button
-              onClick={handleSendMessage}
-              className="bg-primary text-primary-foreground rounded-full w-10 h-10 flex items-center justify-center hover:shadow-glow transition-all hover:scale-105 active:scale-95"
+            <div
+              ref={chatRef}
+              className="flex flex-col gap-3 p-4 flex-1 max-h-96 overflow-y-auto scroll-smooth"
             >
-              <Send className="w-4 h-4" />
-            </button>
+              {messages.map((msg, i) => (
+                <ChatBubble key={i} message={msg.text} isCharacter={msg.isCharacter} />
+              ))}
+            </div>
+
+            {/* Input */}
+            <div className="p-3 border-t border-border flex gap-2">
+              <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                placeholder="Kuch bhi bol de… 💬"
+                className="flex-1 bg-muted/50 rounded-full px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+              />
+              <button
+                onClick={handleSendMessage}
+                className="bg-primary text-primary-foreground rounded-full w-10 h-10 flex items-center justify-center hover:shadow-glow transition-all hover:scale-105 active:scale-95"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
