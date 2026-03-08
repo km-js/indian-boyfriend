@@ -256,7 +256,7 @@ const Welcome = () => {
                   whileHover={selectedOption !== null ? { scale: 1.02 } : {}}
                   whileTap={selectedOption !== null ? { scale: 0.95 } : {}}
                 >
-                  {step === questions.length ? "Surprise dekhiye! 🎁" : "Aage chaliye →"}
+                  {step === questions.length ? "Surprise dekhiye! 🎁" : "Aage chaliye"}
                   <ArrowRight className="w-4 h-4" />
                 </motion.button>
               </motion.div>
