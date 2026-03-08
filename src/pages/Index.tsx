@@ -152,12 +152,18 @@ const Index = () => {
           <div className="flex flex-col items-center justify-center md:w-2/5 shrink-0">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
-              <img
-                key={currentImage}
-                src={currentImage}
-                alt="Arjun - Your virtual companion"
-                className="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg animate-fade-in-up transition-all duration-500"
-              />
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentImage}
+                  src={currentImage}
+                  alt="Arjun - Your virtual companion"
+                  className="w-40 h-40 sm:w-52 sm:h-52 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg"
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                />
+              </AnimatePresence>
             </div>
             {imageCaption ? (
               <p className="mt-3 text-sm font-semibold text-primary animate-fade-in-up text-center">

@@ -86,7 +86,6 @@ const Welcome = () => {
 
   const handleNext = () => {
     if (selectedOption === null) return;
-    playSwoosh();
     const currentQ = questions[step - 1];
     setAnswers((prev) => [...prev, currentQ.options[selectedOption].label]);
     setSelectedOption(null);
