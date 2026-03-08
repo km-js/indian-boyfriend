@@ -89,125 +89,94 @@ export const playMessagePop = (incoming = true) => {
   osc.stop(ctx.currentTime + 0.15);
 };
 
-// ── Background music (romantic soft rain + gentle melody) ──
+// ── Background music (romantic bird chirping) ──
 
 let bgPlaying = false;
-let bgSourceNode: AudioBufferSourceNode | null = null;
-let bgGainNode: GainNode | null = null;
-let bgMelodyInterval: ReturnType<typeof setInterval> | null = null;
-let bgMelodySources: OscillatorNode[] = [];
+let bgChirpInterval: ReturnType<typeof setInterval> | null = null;
+let bgChirpSources: OscillatorNode[] = [];
 
-// Romantic melody notes (Raag Yaman-inspired) in Hz
-const MELODY = [
-  261.6, 293.7, 370.0, 392.0,
-  440.0, 493.9, 523.3, 493.9,
-  440.0, 392.0, 370.0, 293.7,
-  261.6, 293.7, 392.0, 261.6,
-];
+/** Single bird chirp — short sine sweep with harmonics */
+const playChirp = (ctx: AudioContext, baseFreq: number, volume: number, time: number) => {
+  // Main tone
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "sine";
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  const dur = 0.08 + Math.random() * 0.06;
+  osc.frequency.setValueAtTime(baseFreq, time);
+  osc.frequency.exponentialRampToValueAtTime(baseFreq * (1.2 + Math.random() * 0.6), time + dur * 0.4);
+  osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.9, time + dur);
+
+  gain.gain.setValueAtTime(0, time);
+  gain.gain.linearRampToValueAtTime(volume, time + 0.01);
+  gain.gain.setValueAtTime(volume, time + dur * 0.5);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
+
+  osc.start(time);
+  osc.stop(time + dur + 0.01);
+  bgChirpSources.push(osc);
+
+  // Harmonic overtone
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = "sine";
+  osc2.frequency.value = baseFreq * 2;
+  osc2.connect(gain2);
+  gain2.connect(ctx.destination);
+  gain2.gain.setValueAtTime(0, time);
+  gain2.gain.linearRampToValueAtTime(volume * 0.3, time + 0.01);
+  gain2.gain.exponentialRampToValueAtTime(0.001, time + dur);
+  osc2.start(time);
+  osc2.stop(time + dur + 0.01);
+  bgChirpSources.push(osc2);
+};
+
+/** A multi-note bird phrase (2-5 chirps in quick succession) */
+const playBirdPhrase = (ctx: AudioContext) => {
+  const now = ctx.currentTime;
+  const noteCount = 2 + Math.floor(Math.random() * 4);
+  const baseFreq = 1800 + Math.random() * 2000; // Different bird species
+  const vol = 0.04 + Math.random() * 0.04;
+
+  for (let i = 0; i < noteCount; i++) {
+    const freq = baseFreq + (Math.random() - 0.5) * 400;
+    const time = now + i * (0.08 + Math.random() * 0.06);
+    playChirp(ctx, freq, vol, time);
+  }
+};
 
 export const startBgMusic = () => {
   if (bgPlaying) return;
   bgPlaying = true;
   const ctx = getCtx();
 
-  // ── Soft rain layer (brown noise) ──
-  const duration = 4;
-  const sampleRate = ctx.sampleRate;
-  const bufferSize = sampleRate * duration;
-  const buffer = ctx.createBuffer(2, bufferSize, sampleRate);
+  // Play initial chirps
+  playBirdPhrase(ctx);
+  setTimeout(() => bgPlaying && playBirdPhrase(ctx), 600);
 
-  for (let ch = 0; ch < 2; ch++) {
-    const data = buffer.getChannelData(ch);
-    let lastOut = 0;
-    for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      lastOut = (lastOut + 0.02 * white) / 1.02;
-      data[i] = lastOut * 3.5;
-    }
-  }
-
-  const source = ctx.createBufferSource();
-  source.buffer = buffer;
-  source.loop = true;
-
-  const bandpass = ctx.createBiquadFilter();
-  bandpass.type = "bandpass";
-  bandpass.frequency.value = 800;
-  bandpass.Q.value = 0.5;
-
-  const highpass = ctx.createBiquadFilter();
-  highpass.type = "highpass";
-  highpass.frequency.value = 200;
-
-  const rainGain = ctx.createGain();
-  rainGain.gain.value = 0.14;
-
-  source.connect(highpass);
-  highpass.connect(bandpass);
-  bandpass.connect(rainGain);
-  rainGain.connect(ctx.destination);
-  source.start();
-  bgSourceNode = source;
-  bgGainNode = rainGain;
-
-  // ── Soft romantic melody layer ──
-  const delay = ctx.createDelay(0.5);
-  delay.delayTime.value = 0.3;
-  const feedback = ctx.createGain();
-  feedback.gain.value = 0.2;
-  delay.connect(feedback);
-  feedback.connect(delay);
-  delay.connect(ctx.destination);
-
-  let noteIndex = 0;
-  bgMelodyInterval = setInterval(() => {
+  // Random chirps at varying intervals for a natural feel
+  bgChirpInterval = setInterval(() => {
     if (!bgPlaying) return;
-    const now = ctx.currentTime;
-    const freq = MELODY[noteIndex % MELODY.length];
+    playBirdPhrase(ctx);
 
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "triangle";
-    osc.frequency.value = freq;
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    gain.connect(delay);
-
-    // Gentle vibrato
-    const vibrato = ctx.createOscillator();
-    const vibratoGain = ctx.createGain();
-    vibrato.frequency.value = 5;
-    vibratoGain.gain.value = 2;
-    vibrato.connect(vibratoGain);
-    vibratoGain.connect(osc.frequency);
-    vibrato.start(now);
-    vibrato.stop(now + 1.2);
-
-    gain.gain.setValueAtTime(0, now);
-    gain.gain.linearRampToValueAtTime(0.04, now + 0.15);
-    gain.gain.setValueAtTime(0.04, now + 0.5);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-
-    osc.start(now);
-    osc.stop(now + 1.3);
-    bgMelodySources.push(osc);
-
-    noteIndex++;
-  }, 1200);
+    // Sometimes a second bird responds
+    if (Math.random() > 0.5) {
+      setTimeout(() => {
+        if (bgPlaying) playBirdPhrase(ctx);
+      }, 300 + Math.random() * 700);
+    }
+  }, 800 + Math.random() * 1200);
 };
 
 export const stopBgMusic = () => {
   bgPlaying = false;
-  if (bgSourceNode) {
-    try { bgSourceNode.stop(); } catch {}
-    bgSourceNode = null;
-  }
-  bgGainNode = null;
-  bgMelodySources.forEach((osc) => { try { osc.stop(); } catch {} });
-  bgMelodySources = [];
-  if (bgMelodyInterval) {
-    clearInterval(bgMelodyInterval);
-    bgMelodyInterval = null;
+  bgChirpSources.forEach((osc) => { try { osc.stop(); } catch {} });
+  bgChirpSources = [];
+  if (bgChirpInterval) {
+    clearInterval(bgChirpInterval);
+    bgChirpInterval = null;
   }
 };
 
