@@ -131,7 +131,7 @@ const Welcome = () => {
               animate="animate"
               exit="exit"
               transition={pageTransition}
-              className="min-h-screen flex flex-col items-center justify-center px-6"
+              className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6"
             >
               {floatingEmojis.map((e, i) => (
                 <FloatingEmoji key={i} emoji={e} delay={i * 1.5} left={10 + i * 15} />
