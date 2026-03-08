@@ -143,8 +143,8 @@ const Welcome = () => {
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
               >
-                <div className="w-36 h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
-                  <span className="text-6xl">💝</span>
+                <div className="w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
+                  <span className="text-5xl sm:text-6xl">💝</span>
                 </div>
               </motion.div>
 
