@@ -46,6 +46,21 @@ const Index = () => {
   const [currentImage, setCurrentImage] = useState(heroCharacter);
   const [imageCaption, setImageCaption] = useState("");
   const chatRef = useRef<HTMLDivElement>(null);
+  const [musicOn, setMusicOn] = useState(false);
+
+  const toggleMusic = () => {
+    if (isBgMusicPlaying()) {
+      stopBgMusic();
+      setMusicOn(false);
+    } else {
+      startBgMusic();
+      setMusicOn(true);
+    }
+  };
+
+  useEffect(() => {
+    return () => { stopBgMusic(); };
+  }, []);
 
   useEffect(() => {
     if (chatRef.current) {
