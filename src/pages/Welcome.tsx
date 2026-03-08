@@ -197,7 +197,7 @@ const Welcome = () => {
                 <FloatingEmoji key={i} emoji={e} delay={i * 2} left={15 + i * 30} />
               ))}
 
-              <div className="flex gap-2 mb-8">
+              <div className="hidden lg:flex gap-2 mb-8">
                 {questions.map((_, i) => (
                   <motion.div
                     key={i}
