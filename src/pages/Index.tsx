@@ -17,14 +17,8 @@ import { emotions } from "@/data/responses";
 import { Heart, Sparkles, Send, Music, VolumeX } from "lucide-react";
 
 const emotionImages = [
-  arjunSad,
-  arjunHappy,
-  arjunAnxious,
-  arjunAngry,
-  arjunBored,
-  arjunHeartbroken,
-  arjunSleep,
-  arjunHug,
+  arjunSad, arjunHappy, arjunAnxious, arjunAngry,
+  arjunBored, arjunHeartbroken, arjunSleep, arjunHug,
 ];
 
 const emotionCaptions = [
@@ -82,7 +76,6 @@ const Index = () => {
       { text: `I'm feeling ${emotion.label.toLowerCase()}… ${emotion.emoji}`, isCharacter: false },
       { text: randomResponse, isCharacter: true },
     ]);
-    
   };
 
   const handleSendMessage = () => {
@@ -101,7 +94,6 @@ const Index = () => {
       { text: response, isCharacter: true },
     ]);
     setUserInput("");
-    
   };
 
   return (
@@ -130,9 +122,9 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Emotion Buttons */}
-      <section className="px-2 sm:px-4 pb-2 sm:pb-4">
-        <div className="flex flex-nowrap justify-center gap-0.5 sm:gap-2 max-w-4xl mx-auto pb-1.5 px-1">
+      {/* Desktop: Horizontal Emotion Buttons */}
+      <section className="hidden sm:block px-4 pb-4">
+        <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto pb-1.5 px-1">
           {emotions.map((emotion, i) => (
             <EmotionButton
               key={emotion.label}
@@ -145,19 +137,67 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Arjun + Chat Side by Side */}
+      {/* Arjun + Chat */}
       <section className="px-2 sm:px-4 pb-4 sm:pb-8 max-w-5xl mx-auto flex-1 flex flex-col">
         <div className="flex flex-col md:flex-row gap-3 sm:gap-6 items-center md:items-stretch flex-1">
-          {/* Arjun Character - smaller on mobile */}
+          {/* Arjun + Emotions (mobile: flanked, desktop: standalone) */}
           <div className="flex flex-col items-center justify-center md:w-2/5 shrink-0">
-            <div className="relative">
+            
+            {/* Mobile: Emotions on left & right of Arjun */}
+            <div className="flex sm:hidden items-center justify-center gap-2">
+              {/* Left column */}
+              <div className="flex flex-col gap-1">
+                {emotions.slice(0, 4).map((emotion, i) => (
+                  <EmotionButton
+                    key={emotion.label}
+                    emoji={emotion.emoji}
+                    label={emotion.labelHi}
+                    onClick={() => handleEmotionClick(i)}
+                    active={activeEmotion === i}
+                  />
+                ))}
+              </div>
+
+              {/* Arjun center */}
+              <div className="relative flex-shrink-0">
+                <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentImage + '-mobile'}
+                    src={currentImage}
+                    alt="Arjun - Your virtual companion"
+                    className="w-28 h-28 object-contain relative z-10 drop-shadow-lg"
+                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                  />
+                </AnimatePresence>
+              </div>
+
+              {/* Right column */}
+              <div className="flex flex-col gap-1">
+                {emotions.slice(4, 8).map((emotion, i) => (
+                  <EmotionButton
+                    key={emotion.label}
+                    emoji={emotion.emoji}
+                    label={emotion.labelHi}
+                    onClick={() => handleEmotionClick(i + 4)}
+                    active={activeEmotion === i + 4}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop: Arjun only */}
+            <div className="hidden sm:block relative">
               <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl scale-110" />
               <AnimatePresence mode="wait">
                 <motion.img
                   key={currentImage}
                   src={currentImage}
                   alt="Arjun - Your virtual companion"
-                  className="w-28 h-28 sm:w-44 sm:h-44 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg"
+                  className="w-44 h-44 md:w-64 md:h-64 object-contain relative z-10 drop-shadow-lg"
                   initial={{ opacity: 0, scale: 0.8, y: 20 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: -20 }}
@@ -165,6 +205,7 @@ const Index = () => {
                 />
               </AnimatePresence>
             </div>
+
             {imageCaption ? (
               <p className="mt-2 text-xs sm:text-sm font-semibold text-primary animate-fade-in-up text-center">
                 {imageCaption}
