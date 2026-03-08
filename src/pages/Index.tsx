@@ -88,11 +88,11 @@ const Index = () => {
   const handleSendMessage = () => {
     if (!userInput.trim()) return;
     const greetings = [
-      "Aww, main samajh sakta hoon 🫂 Tu bahut strong hai!",
-      "Haan bata aur, main sun raha hoon… 💕",
-      "Tere liye hamesha time hai mere paas. Tu special hai ✨",
+      "Aww, main samajh sakta hoon 🫂 Aap bahut strong hain!",
+      "Haan bataiye aur, main sun raha hoon… 💕",
+      "Aapke liye hamesha time hai mere paas. Aap special hain ✨",
       "Jo bhi ho, hum saath mein handle karenge. Promise! 🤝💫",
-      "Teri baatein sunke mujhe accha lagta hai. Aur bol! 🌸",
+      "Aapki baatein sunke mujhe accha lagta hai. Aur bataiye! 🌸",
     ];
     const response = greetings[Math.floor(Math.random() * greetings.length)];
     setMessages((prev) => [
