@@ -12,7 +12,7 @@ const EmotionButton = ({ emoji, label, onClick, active }: EmotionButtonProps) =>
     <button
       onClick={onClick}
       className={cn(
-        "flex flex-col items-center gap-1.5 px-4 py-3 rounded-2xl transition-all duration-300",
+        "flex flex-col items-center gap-1 px-3 py-2.5 rounded-2xl transition-all duration-300 shrink-0 whitespace-nowrap",
         "hover:scale-105 hover:shadow-dreamy active:scale-95",
         "border border-border",
         active

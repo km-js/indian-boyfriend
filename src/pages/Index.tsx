@@ -102,7 +102,7 @@ const Index = () => {
 
       {/* Emotion Buttons */}
       <section className="px-4 pb-4">
-        <div className="flex flex-wrap justify-center gap-2.5 max-w-2xl mx-auto">
+        <div className="flex flex-nowrap justify-center gap-2 max-w-4xl mx-auto overflow-x-auto">
           {emotions.map((emotion, i) => (
             <EmotionButton
               key={emotion.label}
