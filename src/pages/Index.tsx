@@ -87,6 +87,7 @@ const Index = () => {
 
   const handleSendMessage = () => {
     if (!userInput.trim()) return;
+    playMessagePop(false);
     const greetings = [
       "Aww, main samajh sakta hoon 🫂 Tu bahut strong hai!",
       "Haan bata aur, main sun raha hoon… 💕",
@@ -101,6 +102,7 @@ const Index = () => {
       { text: response, isCharacter: true },
     ]);
     setUserInput("");
+    setTimeout(() => playMessagePop(true), 500);
   };
 
   return (
