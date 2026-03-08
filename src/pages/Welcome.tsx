@@ -303,7 +303,7 @@ const Welcome = () => {
                 <img
                   src={heroCharacter}
                   alt="Arjun - Your virtual companion"
-                  className="w-56 h-56 object-contain relative z-10 drop-shadow-lg"
+                  className="w-40 h-40 sm:w-56 sm:h-56 object-contain relative z-10 drop-shadow-lg"
                 />
               </motion.div>
 
