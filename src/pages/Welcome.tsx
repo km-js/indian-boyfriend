@@ -126,8 +126,8 @@ const Welcome = () => {
 
         <div className="absolute top-4 left-6 flex items-center gap-2">
           <Heart className="w-5 h-5 text-primary fill-primary animate-pulse-soft" />
-          <span className="font-display text-xl font-semibold text-foreground">Mera Saathi</span>
-        </div>
+          <span className="font-display text-xl font-semibold text-foreground">Mera Banda</span>
+        </a>
 
         <div className="relative mb-6 animate-fade-in-up">
           <div className="w-36 h-36 rounded-full bg-primary/15 flex items-center justify-center shadow-glow animate-pulse-soft">
