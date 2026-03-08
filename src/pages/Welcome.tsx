@@ -77,7 +77,6 @@ const Welcome = () => {
   }, []);
 
   const handleStart = () => {
-    playTap();
     playSwoosh();
     setStep(1);
   };
