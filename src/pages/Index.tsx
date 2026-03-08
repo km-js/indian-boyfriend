@@ -116,8 +116,8 @@ const Index = () => {
       </section>
 
       {/* Arjun + Chat Side by Side */}
-      <section className="px-4 pb-8 max-w-5xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-6 items-center md:items-stretch">
+      <section className="px-3 sm:px-4 pb-6 sm:pb-8 max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-center md:items-stretch">
           {/* Arjun Character */}
           <div className="flex flex-col items-center justify-center md:w-2/5 shrink-0">
             <div className="relative">
