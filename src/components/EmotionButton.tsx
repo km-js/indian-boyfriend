@@ -20,8 +20,8 @@ const EmotionButton = ({ emoji, label, onClick, active }: EmotionButtonProps) =>
           : "bg-card hover:bg-accent/50"
       )}
     >
-      <span className="text-lg sm:text-2xl">{emoji}</span>
-      <span className="text-[10px] sm:text-xs font-medium text-foreground/80">{label}</span>
+      <span className="text-sm sm:text-2xl">{emoji}</span>
+      <span className="text-[8px] sm:text-xs font-medium text-foreground/80 leading-tight">{label}</span>
     </button>
   );
 };
